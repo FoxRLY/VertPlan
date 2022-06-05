@@ -121,7 +121,7 @@ void RectShapeBodyPreset(RectShapeBody* button_body)
 
 void RectShapeBodyPresetGrid(RectShapeBody* button_body)
 {
-    button_body->setOutline(1);
+    button_body->setOutline(-0.5);
     button_body->setRestingColor(Color(240,240,240,255));
     button_body->setHoverColor(Color(0,102,204,255));
     button_body->setClickColor(Color(120,120,120,255));

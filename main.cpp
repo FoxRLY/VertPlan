@@ -2,6 +2,7 @@
 #include <vector>
 #include <iostream>
 #include "UIElements/UIConstructor.h"
+#include "InputTextBox.h"
 
 using namespace sf;
 
@@ -12,77 +13,6 @@ void TextPreset(Text& text, Font& font)
     text.setFillColor(Color::Black);
     text.setCharacterSize(25);
 }
-
-class InputTextBox
-{
-private:
-    UIElement *text_box;
-    Text text;
-public:
-    static void userInputHandle(std::vector<InputTextBox *> &input_box_list, char input_char) {
-        for (auto input_box: input_box_list) {
-            if (InputTextBoxEvent::inputChar(input_box->text_box, input_box->text, input_char)) {
-                break;
-            }
-        }
-    }
-
-    explicit InputTextBox(RenderWindow *window) {
-        text_box = UIConstructor::createRectShapeInputTextBox(window);
-        text.setString("");
-    }
-
-    void setString(const char *new_str) {
-        text.setString(new_str);
-    }
-
-    void setPreset(void(*preset_func)(Text &, Font &), Font &font) {
-        preset_func(text, font);
-    }
-
-    void setTextPos(Vector2f pos) {
-        text.setPosition(pos);
-    }
-
-    void setTextPos(float x, float y) {
-        text.setPosition(x, y);
-    }
-
-    void setInputBoxPos(Vector2f pos) {
-        text_box->getBody()->transform(pos, Vector2f(text_box->getBody()->getGlobalBounds().width,
-                                                     text_box->getBody()->getGlobalBounds().height));
-    }
-
-    void setInputBoxPos(float x, float y) {
-        text_box->getBody()->transform(Vector2f(x, y), Vector2f(text_box->getBody()->getGlobalBounds().width,
-                                                                text_box->getBody()->getGlobalBounds().height));
-    }
-
-    UIElement* getUIElement()
-    {
-        return text_box;
-    }
-
-    Text& getText()
-    {
-        return text;
-    }
-
-    void transformInputBox(Vector2f pos, Vector2f size)
-    {
-        text_box->getBody()->transform(pos, size);
-    }
-
-    void drawText()
-    {
-        text_box->getBody()->getWindow()->draw(text);
-    }
-
-    void drawTextBox()
-    {
-        text_box->draw();
-    }
-};
 
 int main()
 {
@@ -109,7 +39,7 @@ int main()
     UIElement* camera = UIConstructor::createCameraBox(&window);
     {
         auto camera_body = (CameraBody*)camera->getBody();
-        camera_body->setDisplayRect(Vector2f(0,48), Vector2f((float)videoMode.width, (float)videoMode.height));
+        camera_body->setDisplayRect(Vector2f(0,50), Vector2f((float)videoMode.width, (float)videoMode.height));
         camera_body->setViewSize(window.getView().getSize());
         camera_body->setCameraPos(Vector2f(0, 0));
         main_element_list.push_back(camera);
@@ -120,7 +50,7 @@ int main()
     UIElement* redact_check_box = UIConstructor::createRectShapeCheckBox(&window);
     {
         auto body = (RectShapeBody*)redact_check_box->getBody();
-        body->transform(Vector2f(1050, 5), Vector2f(30, 30));
+        body->transform(Vector2f(1050, 10), Vector2f(30, 30));
         RectShapeBodyPreset(body);
         main_element_list.push_back(redact_check_box);
     }
@@ -137,7 +67,7 @@ int main()
     UIElement* square_2 = UIConstructor::createRectShapeCheckBox(&window);
     {
         auto button_body = (RectShapeBody*)square_2->getBody();
-        button_body->transform(Vector2f(0, 103), Vector2f(100, 100));
+        button_body->transform(Vector2f(0, 100), Vector2f(100, 100));
         RectShapeBodyPresetGrid(button_body);
         grid_element_list.push_back(square_2);
     }
@@ -145,7 +75,7 @@ int main()
     UIElement* square_3 = UIConstructor::createRectShapeCheckBox(&window);
     {
         auto button_body = (RectShapeBody*)square_3->getBody();
-        button_body->transform(Vector2f(103, 0), Vector2f(100, 100));
+        button_body->transform(Vector2f(100, 0), Vector2f(100, 100));
         RectShapeBodyPresetGrid(button_body);
         grid_element_list.push_back(square_3);
     }
@@ -153,7 +83,7 @@ int main()
     UIElement* square_4 = UIConstructor::createRectShapeCheckBox(&window);
     {
         auto button_body = (RectShapeBody*)square_4->getBody();
-        button_body->transform(Vector2f(103, 103), Vector2f(100, 100));
+        button_body->transform(Vector2f(100, 100), Vector2f(100, 100));
         RectShapeBodyPresetGrid(button_body);
         grid_element_list.push_back(square_4);
     }
@@ -163,7 +93,7 @@ int main()
     {
         TextPreset(grid_size_label, mono);
         grid_size_label.setString(L"Размер сетки:");
-        grid_size_label.setPosition(5, 5);
+        grid_size_label.setPosition(5, 10);
     }
 
     // Знак Икс
@@ -171,7 +101,7 @@ int main()
     {
         TextPreset(grid_size_sign_label, mono);
         grid_size_sign_label.setString(L"X");
-        grid_size_sign_label.setPosition(283, 5);
+        grid_size_sign_label.setPosition(283, 10);
     }
 
     // Подпись к вводу размера квадрата
@@ -179,7 +109,7 @@ int main()
     {
         TextPreset(grid_square_size_label, mono);
         grid_square_size_label.setString(L"Размер квадрата:");
-        grid_square_size_label.setPosition(400, 5);
+        grid_square_size_label.setPosition(400, 10);
     }
 
     // Подпись "Редактировать сетку"
@@ -187,16 +117,16 @@ int main()
     {
         TextPreset(grid_redact_label, mono);
         grid_redact_label.setString(L"Редактировать сетку:");
-        grid_redact_label.setPosition(740, 5);
+        grid_redact_label.setPosition(740, 10);
     }
 
     // Кол-во клеток по горизонтали
     InputTextBox grid_x_input(&window);
     {
         grid_x_input.setString("");
-        grid_x_input.setTextPos(212, 5);
+        grid_x_input.setTextPos(212, 10);
         grid_x_input.setPreset(TextPreset, mono);
-        grid_x_input.transformInputBox(Vector2f(210, 5), Vector2f(60, 30));
+        grid_x_input.transformInputBox(Vector2f(210, 10), Vector2f(60, 30));
         main_element_list.push_back(grid_x_input.getUIElement());
         text_box_list.push_back(&grid_x_input);
     }
@@ -205,9 +135,9 @@ int main()
     InputTextBox grid_y_input(&window);
     {
         grid_y_input.setString("");
-        grid_y_input.setTextPos(312, 5);
+        grid_y_input.setTextPos(312, 10);
         grid_y_input.setPreset(TextPreset, mono);
-        grid_y_input.transformInputBox(Vector2f(310, 5), Vector2f(60, 30));
+        grid_y_input.transformInputBox(Vector2f(310, 10), Vector2f(60, 30));
         main_element_list.push_back(grid_y_input.getUIElement());
         text_box_list.push_back(&grid_y_input);
     }
@@ -216,9 +146,9 @@ int main()
     InputTextBox grid_square_input(&window);
     {
         grid_square_input.setString("");
-        grid_square_input.setTextPos(Vector2f(650, 5));
+        grid_square_input.setTextPos(Vector2f(650, 10));
         grid_square_input.setPreset(TextPreset, mono);
-        grid_square_input.transformInputBox(Vector2f(650, 5), Vector2f(60, 30));
+        grid_square_input.transformInputBox(Vector2f(650, 10), Vector2f(60, 30));
         main_element_list.push_back(grid_square_input.getUIElement());
         text_box_list.push_back(&grid_square_input);
     }
@@ -227,7 +157,7 @@ int main()
     RectangleShape map_edge;
     {
         map_edge.setSize(Vector2f(videoMode.width, videoMode.height));
-        map_edge.setPosition(Vector2f(0, 48));
+        map_edge.setPosition(Vector2f(0, 50));
         map_edge.setOutlineThickness(1);
         map_edge.setOutlineColor(Color::Black);
     }
@@ -235,7 +165,7 @@ int main()
     // Края ввода размеров сетки
     RectangleShape grid_size_input_edge;
     {
-        grid_size_input_edge.setSize(Vector2f(390, 48));
+        grid_size_input_edge.setSize(Vector2f(390, 50));
         grid_size_input_edge.setPosition(Vector2f(0, 0));
         grid_size_input_edge.setOutlineThickness(1);
         grid_size_input_edge.setOutlineColor(Color::Black);
@@ -243,24 +173,18 @@ int main()
 
     RectangleShape grid_square_input_edge;
     {
-        grid_square_input_edge.setSize(Vector2f(730, 48));
+        grid_square_input_edge.setSize(Vector2f(730, 50));
         grid_square_input_edge.setPosition(Vector2f(0, 0));
         grid_square_input_edge.setOutlineThickness(1);
         grid_square_input_edge.setOutlineColor(Color::Black);
     }
+
+    // Флаг фокуса окна
+    bool has_focus = true;
     // Цикл приложения
     while(window.isOpen())
     {
         auto camera_body = (CameraBody*)camera->getBody();
-        UIElement::eventCheckLoop(main_element_list);
-        camera_body->applyView();
-        UIElement::eventCheckLoop(grid_element_list);
-        camera_body->resetView();
-
-        // Перемещение камеры
-        auto* camera_box_event = (GraphNavEvent*)camera->getEvent();
-        camera_body->setCameraPos(camera_body->getCameraPos() - camera_box_event->getMouseDelta() * camera_zoom);
-
         // Цикл обработки событий окна
         Event event;
         while(window.pollEvent(event))
@@ -294,7 +218,38 @@ int main()
                     }
                     break;
                 }
+                case Event::MouseButtonPressed:
+                {
+                    if(event.mouseButton.button == Mouse::Right)
+                    {
+                        camera_body->setCameraPos({0,0});
+                    }
+                    break;
+                }
+                case Event::GainedFocus:
+                {
+                    has_focus = true;
+                    break;
+                }
+                case Event::LostFocus:
+                {
+                    has_focus = false;
+                    break;
+                }
             }
+        }
+
+        if(has_focus)
+        {
+            UIElement::eventCheckLoop(main_element_list);
+            camera_body->applyView();
+            UIElement::eventCheckLoop(grid_element_list);
+            camera_body->resetView();
+
+            // Перемещение камеры
+            auto* camera_box_event = (GraphNavEvent*)camera->getEvent();
+            camera_body->setCameraPos(camera_body->getCameraPos() - camera_box_event->getMouseDelta() * camera_zoom);
+
         }
 
         if(redact_check_box->getEventResult())
