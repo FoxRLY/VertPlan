@@ -17,4 +17,5 @@ public:
     std::string& getExpression();
     double getResult(std::map<std::string, double>& var_map);
     void getResultRange(std::vector<double>& results, double start, double end, double step);
+    double getSimpleResult(const std::string& expression);
 };

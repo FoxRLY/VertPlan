@@ -244,3 +244,10 @@ Calculator::Calculator()
     RPNstring = "";
     expression = "";
 }
+
+double Calculator::getSimpleResult(const std::string &new_expression)
+{
+    setExpression(new_expression);
+    std::map<std::string, double> empty_map;
+    return getResult(empty_map);
+}

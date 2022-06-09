@@ -1,0 +1,73 @@
+#include "CornerInterface.h"
+
+CornerInterface::CornerInterface(RenderWindow* new_window): input_height_text_box(new_window)
+{
+    window = new_window;
+    setPos({0,0});
+    result_delta_text.setString("");
+    result_height_text.setString("");
+    input_height_text_box.setString("");
+    updateTextComposition();
+}
+
+CornerInterface::CornerInterface(RenderWindow* new_window, Vector2f new_pos): CornerInterface(new_window)
+{
+    setPos(new_pos);
+    updateTextComposition();
+}
+
+void CornerInterface::setPos(Vector2f new_pos)
+{
+    pos = new_pos;
+    updateTextComposition();
+}
+
+void CornerInterface::setDeltaText(std::string new_delta)
+{
+    result_delta_text.setString(new_delta);
+}
+
+void CornerInterface::setResultHeight(std::string new_height)
+{
+    result_height_text.setString(new_height);
+}
+
+float CornerInterface::getInputHeight()
+{
+    Calculator temp_calc;
+    return temp_calc.getSimpleResult(input_height_text_box.getText().getString());
+}
+
+void CornerInterface::updateTextComposition()
+{
+    input_height_text_box.setInputBoxPos({pos.x+2, pos.y+2});
+    input_height_text_box.setTextPos({pos.x+2, pos.y+2});
+
+    Vector2f new_delta_pos;
+    new_delta_pos.x = pos.x - result_delta_text.getGlobalBounds().width - 2;
+    new_delta_pos.y = pos.y + 2;
+    result_delta_text.setPosition(new_delta_pos);
+
+    Vector2f new_result_height_pos;
+    new_result_height_pos.x = pos.x + 2;
+    new_result_height_pos.y = pos.y - result_height_text.getGlobalBounds().height - 2;
+    result_height_text.setPosition(new_result_height_pos);
+}
+
+void CornerInterface::draw()
+{
+    window->draw(result_height_text);
+    window->draw(result_delta_text);
+    input_height_text_box.drawTextBox();
+    input_height_text_box.drawText();
+}
+
+InputTextBox &CornerInterface::getInputBox()
+{
+    return input_height_text_box;
+}
+
+void CornerInterface::eventCheck()
+{
+    input_height_text_box.getUIElement()->eventCheck();
+}
