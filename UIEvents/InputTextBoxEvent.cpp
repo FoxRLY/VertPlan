@@ -87,7 +87,7 @@ bool InputTextBoxEvent::inputChar(UIElement* input_box, Text& input_text, char i
     if(input_box->getEventResult())
     {
         InputTextBoxEvent::addChar(input_char, input_text);
-        if(input_text.getGlobalBounds().width > input_box->getBody()->getGlobalBounds().width)
+        if(input_text.getGlobalBounds().left+input_text.getGlobalBounds().width >= input_box->getBody()->getGlobalBounds().left+input_box->getBody()->getGlobalBounds().width)
         {
             InputTextBoxEvent::addChar(8, input_text);
         }
