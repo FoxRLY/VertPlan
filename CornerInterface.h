@@ -4,10 +4,12 @@
 #include "InputTextBox.h"
 #include "translator.h"
 
+using TextPresetFunc = void(*)(Text&, Font&);
+
 class CornerInterface
 {
 private:
-    bool is_active = true;
+    bool is_active;
     RenderWindow* window;
     Vector2f pos;
     Text result_delta_text;
@@ -15,8 +17,8 @@ private:
     InputTextBox input_height_text_box;
     void updateTextComposition();
 public:
-    explicit CornerInterface(RenderWindow* window);
-    CornerInterface(RenderWindow* window, Vector2f new_pos);
+    CornerInterface(RenderWindow* window, TextPresetFunc func, Font& font);
+    CornerInterface(RenderWindow* window, Vector2f new_pos, TextPresetFunc func, Font& font);
     void setPos(Vector2f new_pos);
     void draw();
     void setDeltaText(std::string new_delta);
@@ -24,5 +26,7 @@ public:
     float getInputHeight();
     InputTextBox& getInputBox();
     void eventCheck();
-    bool inputEventCheck(char input_char)
+    void setActive(bool state);
+    bool inputEventCheck(char input_char);
+    Vector2f getPos();
 };

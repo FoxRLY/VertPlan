@@ -28,6 +28,6 @@ add_executable(VertPlan main.cpp
         UIEvents/ButtonEvent.cpp UIEvents/ButtonEvent.h UIEvents/InputTextBoxEvent.cpp UIEvents/InputTextBoxEvent.h
         UIEvents/GraphNavEvent.cpp UIEvents/GraphNavEvent.h  UIEvents/DefaultEvent.cpp UIEvents/DefaultEvent.h
         UIEvents/UIEvent.cpp UIEvents/UIEvent.h UIBodies/GraphDrawingBody.cpp UIBodies/GraphDrawingBody.h
-        translator.cpp translator.h Grid.cpp Grid.h InputTextBox.cpp InputTextBox.h GridInterface.cpp GridInterface.h CornerInterface.cpp CornerInterface.h)
+        translator.cpp translator.h Grid.cpp Grid.h InputTextBox.cpp InputTextBox.h CornerInterface.cpp CornerInterface.h)
 
 target_link_libraries(VertPlan sfml-graphics sfml-audio sfml-window sfml-system)

@@ -3,6 +3,7 @@
 #include <iostream>
 #include "UIElements/UIConstructor.h"
 #include "InputTextBox.h"
+#include "CornerInterface.h"
 
 using namespace sf;
 
@@ -12,6 +13,14 @@ void TextPreset(Text& text, Font& font)
     text.setString("");
     text.setFillColor(Color::Black);
     text.setCharacterSize(25);
+}
+
+void TextPresetGrid(Text& text, Font& font)
+{
+    text.setFont(font);
+    text.setString("");
+    text.setFillColor(Color::Black);
+    text.setCharacterSize(20);
 }
 
 int main()
@@ -55,38 +64,7 @@ int main()
         main_element_list.push_back(redact_check_box);
     }
 
-    //Кнопка
-    UIElement* square_1 = UIConstructor::createRectShapeCheckBox(&window);
-    {
-        auto button_body = (RectShapeBody*)square_1->getBody();
-        button_body->transform(Vector2f(0, 0), Vector2f(100, 100));
-        RectShapeBodyPresetGrid(button_body);
-        grid_element_list.push_back(square_1);
-    }
-
-    UIElement* square_2 = UIConstructor::createRectShapeCheckBox(&window);
-    {
-        auto button_body = (RectShapeBody*)square_2->getBody();
-        button_body->transform(Vector2f(0, 100), Vector2f(100, 100));
-        RectShapeBodyPresetGrid(button_body);
-        grid_element_list.push_back(square_2);
-    }
-
-    UIElement* square_3 = UIConstructor::createRectShapeCheckBox(&window);
-    {
-        auto button_body = (RectShapeBody*)square_3->getBody();
-        button_body->transform(Vector2f(100, 0), Vector2f(100, 100));
-        RectShapeBodyPresetGrid(button_body);
-        grid_element_list.push_back(square_3);
-    }
-
-    UIElement* square_4 = UIConstructor::createRectShapeCheckBox(&window);
-    {
-        auto button_body = (RectShapeBody*)square_4->getBody();
-        button_body->transform(Vector2f(100, 100), Vector2f(100, 100));
-        RectShapeBodyPresetGrid(button_body);
-        grid_element_list.push_back(square_4);
-    }
+    CornerInterface corner_1(&window, {0,0}, TextPresetGrid, mono);
 
     // Подпись к вводу сетки
     Text grid_size_label;
@@ -120,7 +98,7 @@ int main()
         grid_redact_label.setPosition(740, 10);
     }
 
-    // Кол-во клеток по горизонтали
+// Кол-во клеток по горизонтали
     InputTextBox grid_x_input(&window);
     {
         grid_x_input.setString("");
@@ -215,6 +193,7 @@ int main()
                     {
                         char input_char = static_cast<char>(event.text.unicode);
                         InputTextBox::userInputHandle(text_box_list, input_char);
+                        corner_1.inputEventCheck(input_char);
                     }
                     break;
                 }
@@ -244,6 +223,7 @@ int main()
             UIElement::eventCheckLoop(main_element_list);
             camera_body->applyView();
             UIElement::eventCheckLoop(grid_element_list);
+            corner_1.eventCheck();
             camera_body->resetView();
 
             // Перемещение камеры
@@ -252,20 +232,8 @@ int main()
 
         }
 
-        if(redact_check_box->getEventResult())
-        {
-            square_1->setEventEnabled(true);
-            square_2->setEventEnabled(true);
-            square_3->setEventEnabled(true);
-            square_4->setEventEnabled(true);
-        }
-        else
-        {
-            square_1->setEventEnabled(false);
-            square_2->setEventEnabled(false);
-            square_3->setEventEnabled(false);
-            square_4->setEventEnabled(false);
-        }
+        corner_1.setActive(redact_check_box->getEventResult());
+
 
         // Фаза отрисовки элементов
         window.clear(Color::White);
@@ -275,10 +243,7 @@ int main()
         window.draw(map_edge);
 
         camera_body->applyView();
-        square_1->draw();
-        square_2->draw();
-        square_3->draw();
-        square_4->draw();
+        corner_1.draw();
         camera_body->resetView();
 
         redact_check_box->draw();

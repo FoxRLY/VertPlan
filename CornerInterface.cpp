@@ -1,16 +1,22 @@
 #include "CornerInterface.h"
 
-CornerInterface::CornerInterface(RenderWindow* new_window): input_height_text_box(new_window)
+CornerInterface::CornerInterface(RenderWindow* new_window, TextPresetFunc func, Font& font): input_height_text_box(new_window)
 {
     window = new_window;
+    is_active = true;
     setPos({0,0});
-    result_delta_text.setString("");
-    result_height_text.setString("");
-    input_height_text_box.setString("");
+
+    func(result_delta_text, font);
+    func(result_height_text, font);
+
+    input_height_text_box.setPreset(func, font);
+    input_height_text_box.transformInputBox({0,0}, {52,1});
+
+
     updateTextComposition();
 }
 
-CornerInterface::CornerInterface(RenderWindow* new_window, Vector2f new_pos): CornerInterface(new_window)
+CornerInterface::CornerInterface(RenderWindow* new_window, Vector2f new_pos, TextPresetFunc func, Font& font): CornerInterface(new_window, func, font)
 {
     setPos(new_pos);
     updateTextComposition();
@@ -56,10 +62,13 @@ void CornerInterface::updateTextComposition()
 
 void CornerInterface::draw()
 {
-    window->draw(result_height_text);
-    window->draw(result_delta_text);
-    input_height_text_box.drawTextBox();
-    input_height_text_box.drawText();
+    if(is_active)
+    {
+        window->draw(result_height_text);
+        window->draw(result_delta_text);
+        input_height_text_box.drawTextBox();
+        input_height_text_box.drawText();
+    }
 }
 
 InputTextBox &CornerInterface::getInputBox()
@@ -70,4 +79,23 @@ InputTextBox &CornerInterface::getInputBox()
 void CornerInterface::eventCheck()
 {
     input_height_text_box.getUIElement()->eventCheck();
+}
+
+bool CornerInterface::inputEventCheck(char input_char)
+{
+    std::vector<InputTextBox *> buffer = {&input_height_text_box};
+    std::string prev_string = input_height_text_box.getText().getString();
+    InputTextBox::userInputHandle(buffer, input_char);
+    return prev_string != input_height_text_box.getText().getString();
+}
+
+void CornerInterface::setActive(bool state)
+{
+    is_active = state;
+    input_height_text_box.getUIElement()->setEventEnabled(is_active);
+}
+
+Vector2f CornerInterface::getPos()
+{
+    return pos;
 }
