@@ -3,7 +3,7 @@
 #include <iostream>
 #include "UIElements/UIConstructor.h"
 #include "InputTextBox.h"
-#include "CornerInterface.h"
+#include "GridAssets/CornerInterface.h"
 
 using namespace sf;
 

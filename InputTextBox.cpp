@@ -44,7 +44,7 @@ UIElement* InputTextBox::getUIElement()
     return text_box;
 }
 
-Text& InputTextBox::getText()
+const Text& InputTextBox::getText() const
 {
     return text;
 }

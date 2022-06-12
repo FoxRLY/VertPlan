@@ -108,18 +108,28 @@ void Grid::createCorners(std::array<int, 2> dims)
     }
 }
 
-void Grid::updateCells(std::array<int, 2> pos, bool state)
+void Grid::updateCells(const std::vector<std::vector<bool>>& cells)
 {
-    if(pos[0] > dimensions[0] || pos[0] < 0 || pos[1] > dimensions[1]|| pos[1] < 0)
+    int i = 0;
+    for(auto& cell_line: cells)
     {
-        throw std::exception();
+        for(auto cell: cell_line)
+        {
+            grid_cells[i] = cell;
+            i++;
+        }
     }
-    grid_cells[dimensions[0]*pos[1] + pos[0]] = state;
 }
 
-void Grid::updateCorner(std::array<int, 2> pos, float height)
+void Grid::updateCorners(const std::vector<std::vector<CornerInterface>>& corners)
 {
-    grid_corners[pos[1]][pos[0]].height = height;
+    for(int y = 0; y < dimensions[1]; y++)
+    {
+        for(int x = 0; x < dimensions[0]; x++)
+        {
+            grid_corners[y][x].height = corners[y][x].getInputHeight();
+        }
+    }
 }
 
 void Grid::setDimensions(std::array<int, 2> new_dims)

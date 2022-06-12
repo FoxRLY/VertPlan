@@ -1,7 +1,7 @@
 #pragma once
 #include <string>
-#include "UIElements/UIConstructor.h"
-#include "InputTextBox.h"
+#include "../UIElements/UIConstructor.h"
+#include "../InputTextBox.h"
 #include "translator.h"
 
 using TextPresetFunc = void(*)(Text&, Font&);
@@ -23,7 +23,7 @@ public:
     void draw();
     void setDeltaText(std::string new_delta);
     void setResultHeight(std::string new_height);
-    float getInputHeight();
+    float getInputHeight() const;
     InputTextBox& getInputBox();
     void eventCheck();
     void setActive(bool state);

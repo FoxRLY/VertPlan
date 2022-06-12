@@ -1,6 +1,7 @@
 #pragma once
 #include <array>
 #include <vector>
+#include "CornerInterface.h"
 
 struct Corner
 {
@@ -39,8 +40,8 @@ public:
     }
     void setDimensions(std::array<int,2> new_dims);
     const std::array<int, 2>& getDimensions();
-    void updateCells(std::array<int,2> pos, bool state);
-    void updateCorner(std::array<int,2> pos, float height);
+    void updateCells(const std::vector<std::vector<bool>>& cells);
+    void updateCorners(const std::vector<std::vector<CornerInterface>>& corners);
     void setCellSize(float new_size);
     float getCellSize() const;
     const std::vector<bool>& getCells();

@@ -18,7 +18,7 @@ public:
     void setInputBoxPos(Vector2f pos);
     void setInputBoxPos(float x, float y);
     UIElement* getUIElement();
-    Text& getText();
+    const Text& getText() const;
     void transformInputBox(Vector2f pos, Vector2f size);
     void drawText();
     void drawTextBox();

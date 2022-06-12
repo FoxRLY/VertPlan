@@ -38,7 +38,7 @@ void CornerInterface::setResultHeight(std::string new_height)
     result_height_text.setString(new_height);
 }
 
-float CornerInterface::getInputHeight()
+float CornerInterface::getInputHeight() const
 {
     Calculator temp_calc;
     return temp_calc.getSimpleResult(input_height_text_box.getText().getString());
@@ -47,7 +47,7 @@ float CornerInterface::getInputHeight()
 void CornerInterface::updateTextComposition()
 {
     input_height_text_box.setInputBoxPos({pos.x+2, pos.y+2});
-    input_height_text_box.setTextPos({pos.x+2, pos.y+2});
+    input_height_text_box.setTextPos({pos.x+2, pos.y+3});
 
     Vector2f new_delta_pos;
     new_delta_pos.x = pos.x - result_delta_text.getGlobalBounds().width - 2;
