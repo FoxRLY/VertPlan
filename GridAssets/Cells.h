@@ -6,7 +6,7 @@
 class Cells
 {
 private:
-    std::vector<std::vector<std::unique_ptr<UIElement>>> cell_matrix;
+    UIElement*** cell_matrix;
     Vector2i dims;
     RenderWindow* window;
     int cell_pixel_size;

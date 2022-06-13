@@ -4,6 +4,7 @@
 #include "UIElements/UIConstructor.h"
 #include "InputTextBox.h"
 #include "GridAssets/CornerInterface.h"
+#include "GridAssets/Cells.h"
 
 using namespace sf;
 
@@ -64,7 +65,8 @@ int main()
         main_element_list.push_back(redact_check_box);
     }
 
-    CornerInterface corner_1(&window, {0,0}, TextPresetGrid, mono);
+
+    Cells cells(&window,100, {4,4});
 
     // Подпись к вводу сетки
     Text grid_size_label;
@@ -193,7 +195,6 @@ int main()
                     {
                         char input_char = static_cast<char>(event.text.unicode);
                         InputTextBox::userInputHandle(text_box_list, input_char);
-                        corner_1.inputEventCheck(input_char);
                     }
                     break;
                 }
@@ -223,7 +224,10 @@ int main()
             UIElement::eventCheckLoop(main_element_list);
             camera_body->applyView();
             UIElement::eventCheckLoop(grid_element_list);
-            corner_1.eventCheck();
+            if(redact_check_box->getEventResult())
+            {
+                cells.eventCheck();
+            }
             camera_body->resetView();
 
             // Перемещение камеры
@@ -232,7 +236,6 @@ int main()
 
         }
 
-        corner_1.setActive(redact_check_box->getEventResult());
 
 
         // Фаза отрисовки элементов
@@ -243,7 +246,7 @@ int main()
         window.draw(map_edge);
 
         camera_body->applyView();
-        corner_1.draw();
+        cells.draw();
         camera_body->resetView();
 
         redact_check_box->draw();

@@ -6,7 +6,7 @@
 class Corners
 {
 private:
-    std::vector<std::vector<CornerInterface>> corner_matrix;
+    CornerInterface*** corner_matrix;
     Vector2i dims;
     Vector2f pos;
     int cell_pixel_size;

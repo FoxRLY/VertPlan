@@ -3,21 +3,51 @@
 
 void Cells::setDimensions(Vector2i new_dims)
 {
-    cell_matrix.resize(new_dims.y);
-    for(auto& cell_line: cell_matrix)
+    UIElement*** new_cell_matrix = new UIElement**[new_dims.y];
+    for(int y = 0; y < new_dims.y; y++)
     {
-        cell_line.resize(new_dims.x);
-        for(int x = dims.x-1; x < new_dims.x; x++)
+        new_cell_matrix[y] = new UIElement*[new_dims.x];
+        for(int x = 0; x < new_dims.x; x++)
         {
-            auto new_cell = UIConstructor::createRectShapeCheckBox(window);
-            cell_line[x] = static_cast<std::unique_ptr<UIElement>>(new_cell);
+            if(x <= dims.x && y <= dims.y && cell_matrix)
+            {
+                new_cell_matrix[y][x] = cell_matrix[y][x];
+            }
+            else
+            {
+                new_cell_matrix[y][x] = UIConstructor::createRectShapeCheckBox(window);
+                new_cell_matrix[y][x]->getBody()->transform({(float)x*cell_pixel_size, (float)y*cell_pixel_size},
+                                                            {(float)cell_pixel_size, (float)cell_pixel_size});
+                RectShapeBodyPresetGrid((RectShapeBody*)new_cell_matrix[y][x]->getBody());
+            }
         }
     }
+    if(new_dims.x < dims.x)
+    {
+        for(int x = new_dims.x-1; x < dims.x-1; x++)
+        {
+            for(int y = 0; y < new_dims.y; y++)
+            {
+                delete cell_matrix[y][x];
+            }
+        }
+    }
+    if(new_dims.y < dims.y)
+    {
+        for(int y = new_dims.y-1; y < dims.y-1; y++)
+        {
+            delete[] cell_matrix[y];
+        }
+    }
+    delete[] cell_matrix;
+    cell_matrix = new_cell_matrix;
+    dims = new_dims;
 }
 
 Cells::Cells(RenderWindow *new_window, int new_size)
 {
-    dims = {};
+    dims = {0,0};
+    cell_matrix = nullptr;
     window = new_window;
     setCellPixelSize(new_size);
 }
@@ -34,22 +64,22 @@ void Cells::setCellPixelSize(int size)
 
 void Cells::eventCheck()
 {
-    for(auto& cell_line: cell_matrix)
+    for(int x = 0; x < dims.x; x++)
     {
-        for(auto& cell: cell_line)
+        for(int y = 0; y < dims.y; y++)
         {
-            cell->eventCheck();
+            cell_matrix[y][x]->eventCheck();
         }
     }
 }
 
 void Cells::draw()
 {
-    for(auto& cell_line: cell_matrix)
+    for(int x = 0; x < dims.x; x++)
     {
-        for(auto& cell: cell_line)
+        for(int y = 0; y < dims.y; y++)
         {
-            cell->draw();
+            cell_matrix[y][x]->draw();
         }
     }
 }
@@ -63,7 +93,7 @@ std::vector<std::vector<bool>> Cells::getCells()
         map[y].resize(dims.x);
         for(int x = 0; x < dims.x; x++)
         {
-            map[y][x] = cell_matrix[y][x]->getEventResult();
+            map[y][x] = !cell_matrix[y][x]->getEventResult();
         }
     }
     return map;

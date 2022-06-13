@@ -12,22 +12,52 @@ void Corners::setCellPixelSize(int new_cell_size)
 
 void Corners::setDimensions(Vector2i new_dims)
 {
-    dims = new_dims;
-    corner_matrix.resize(dims.y);
-    for(int y = 0; y < dims.y; y++)
+
+
+    CornerInterface*** new_corner_matrix = new CornerInterface**[new_dims.y];
+    for(int y = 0; y < new_dims.y; y++)
     {
-        corner_matrix[y].resize(dims.x, CornerInterface(window, preset_func, font));
-        for(int x = 0; x < dims.x; x++)
+        new_corner_matrix[y] = new CornerInterface*[new_dims.x];
+        for(int x = 0; x < new_dims.x; x++)
         {
-            corner_matrix[y][x].setPos({(float)(x * cell_pixel_size), (float)(y * cell_pixel_size)});
+            if(x <= dims.x && y <= dims.y && corner_matrix)
+            {
+                new_corner_matrix[y][x] = corner_matrix[y][x];
+            }
+            else
+            {
+                new_corner_matrix[y][x] = new CornerInterface(window, preset_func, font);
+                new_corner_matrix[y][x]->setPos({(float)(x * cell_pixel_size), (float)(y * cell_pixel_size)});
+            }
         }
     }
+    if(new_dims.x < dims.x)
+    {
+        for(int x = new_dims.x-1; x < dims.x-1; x++)
+        {
+            for(int y = 0; y < new_dims.y; y++)
+            {
+                delete corner_matrix[y][x];
+            }
+        }
+    }
+    if(new_dims.y < dims.y)
+    {
+        for(int y = new_dims.y-1; y < dims.y-1; y++)
+        {
+            delete[] corner_matrix[y];
+        }
+    }
+    delete[] corner_matrix;
+    corner_matrix = new_corner_matrix;
+    dims = new_dims;
 }
 
 Corners::Corners(Vector2f new_pos, int new_cell_size, TextPresetFunc new_func, Font& new_font, RenderWindow* new_window): font{new_font}
 {
     window = new_window;
     preset_func = new_func;
+    corner_matrix = nullptr;
     setPos(new_pos);
     setCellPixelSize(new_cell_size);
 }
@@ -44,7 +74,7 @@ void Corners::updateCornerSwitching(const std::vector<std::vector<Corner>>& swit
     {
         for(int x = 0; x < dims.x; x++)
         {
-            corner_matrix[y][x].setActive(switch_matrix[y][x].on_edge);
+            corner_matrix[y][x]->setActive(switch_matrix[y][x].on_edge);
         }
     }
 }
@@ -62,41 +92,41 @@ void Corners::updateCornerData(const std::vector<std::vector<Corner>>& matrix)
     {
         for(int x = 0; x < dims.x; x++)
         {
-            corner_matrix[y][x].setDeltaText(std::to_string(matrix[y][x].delta));
-            corner_matrix[y][x].setResultHeight(std::to_string(matrix[y][x].height + matrix[y][x].delta));
+            corner_matrix[y][x]->setDeltaText(std::to_string(matrix[y][x].delta));
+            corner_matrix[y][x]->setResultHeight(std::to_string(matrix[y][x].height + matrix[y][x].delta));
         }
     }
 }
 
 void Corners::draw()
 {
-    for(auto& corner_line: corner_matrix)
+    for(int y = 0; y < dims.y; y++)
     {
-        for(auto& corner: corner_line)
+        for(int x = 0; x < dims.x; x++)
         {
-            corner.draw();
+            corner_matrix[y][x]->draw();
         }
     }
 }
 
 void Corners::eventCheck()
 {
-    for(auto& corner_line: corner_matrix)
+    for(int y = 0; y < dims.y; y++)
     {
-        for(auto& corner: corner_line)
+        for(int x = 0; x < dims.x; x++)
         {
-            corner.eventCheck();
+            corner_matrix[y][x]->eventCheck();
         }
     }
 }
 
 void Corners::inputEventCheck(char input_char)
 {
-    for(auto& corner_line: corner_matrix)
+    for(int y = 0; y < dims.y; y++)
     {
-        for(auto& corner: corner_line)
+        for(int x = 0; x < dims.x; x++)
         {
-            corner.inputEventCheck(input_char);
+            corner_matrix[y][x]->inputEventCheck(input_char);
         }
     }
 }
