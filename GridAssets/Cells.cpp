@@ -62,13 +62,18 @@ void Cells::setCellPixelSize(int size)
     cell_pixel_size = size;
 }
 
+void Cells::setActive(bool state)
+{
+    is_active = state;
+}
+
 void Cells::eventCheck()
 {
-    for(int x = 0; x < dims.x; x++)
-    {
-        for(int y = 0; y < dims.y; y++)
-        {
-            cell_matrix[y][x]->eventCheck();
+    if(is_active) {
+        for (int x = 0; x < dims.x; x++) {
+            for (int y = 0; y < dims.y; y++) {
+                cell_matrix[y][x]->eventCheck();
+            }
         }
     }
 }

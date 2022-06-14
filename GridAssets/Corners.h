@@ -22,6 +22,7 @@ public:
     void updateCornerSwitching(const std::vector<std::vector<Corner>>& matrix);
     const std::vector<std::vector<CornerInterface>>& getHeightMap();
     void updateCornerData(const std::vector<std::vector<Corner>>& matrix);
+    void hideCorners();
     void eventCheck();
     void inputEventCheck(char input_char);
     void draw();

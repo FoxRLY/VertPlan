@@ -54,6 +54,17 @@ void Corners::updateCornerSwitching(const std::vector<std::vector<Corner>>& swit
     }
 }
 
+void Corners::hideCorners()
+{
+    for(int y = 0; y < dims.y; y++)
+    {
+        for(int x = 0; x < dims.x; x++)
+        {
+            corner_matrix[y][x].setActive(false);
+        }
+    }
+}
+
 // При расчетах дельты
 const std::vector<std::vector<CornerInterface>>& Corners::getHeightMap()
 {

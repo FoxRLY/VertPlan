@@ -58,12 +58,22 @@ int main()
     float camera_zoom = 1.0f;
 
     // Галка "Редактировать"
+    bool prev_redact_flag = false;
     UIElement* redact_check_box = UIConstructor::createRectShapeCheckBox(&window);
     {
         auto body = (RectShapeBody*)redact_check_box->getBody();
         body->transform(Vector2f(1050, 10), Vector2f(30, 30));
+        redact_check_box->setEventResult(true);
         RectShapeBodyPreset(body);
         main_element_list.push_back(redact_check_box);
+    }
+
+    UIElement* solve_button = UIConstructor::createRectShapeButton(&window);
+    {
+        auto body = (RectShapeBody*)solve_button->getBody();
+        body->transform({1100,10},{30,30});
+        RectShapeBodyPreset(body);
+        main_element_list.push_back(solve_button);
     }
 
     // Подпись к вводу сетки
@@ -231,6 +241,21 @@ int main()
             camera_body->setCameraPos(camera_body->getCameraPos() - camera_box_event->getMouseDelta() * camera_zoom);
         }
 
+        if(prev_redact_flag && !redact_check_box->getEventResult())
+        {
+            grid.setCellsActive(false);
+            grid.updateGridStructure();
+        }
+        if(!prev_redact_flag && redact_check_box->getEventResult())
+        {
+            grid.setCellsActive(true);
+            grid.hideCorners();
+        }
+        prev_redact_flag = redact_check_box->getEventResult();
+        if(!prev_redact_flag && solve_button->getEventResult())
+        {
+            grid.solveGrid();
+        }
 
 
         // Фаза отрисовки элементов
@@ -245,6 +270,7 @@ int main()
         camera_body->resetView();
 
         redact_check_box->draw();
+        solve_button->draw();
         grid_x_input.drawTextBox();
         grid_y_input.drawTextBox();
         grid_square_input.drawTextBox();
@@ -258,5 +284,7 @@ int main()
 
         // Вывод изображения
         window.display();
+
+
     }
 }

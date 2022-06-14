@@ -1,5 +1,10 @@
 #include "GridInterface.h"
 
+void GridInterface::setCellsActive(bool state)
+{
+    cells.setActive(state);
+}
+
 void GridInterface::setCellPixelSize(int cell_size)
 {
     corners.setCellPixelSize(cell_size);
@@ -24,9 +29,15 @@ void GridInterface::draw()
     corners.draw();
 }
 
+void GridInterface::hideCorners()
+{
+    corners.hideCorners();
+}
+
 void GridInterface::updateGridStructure()
 {
     math.updateCells(cells.getCells());
+    math.solveGrid();
     corners.updateCornerSwitching(math.getCorners());
 }
 
@@ -34,6 +45,7 @@ void GridInterface::solveGrid()
 {
     math.updateCorners(corners.getHeightMap());
     math.solveGrid();
+    corners.updateCornerData(math.getCorners());
 }
 
 void GridInterface::inputEventCheck(char input_char)
