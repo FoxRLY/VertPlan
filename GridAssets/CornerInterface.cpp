@@ -1,9 +1,41 @@
 #include "CornerInterface.h"
 
+CornerInterface::CornerInterface()
+{
+    is_active = true;
+    is_initialized = false;
+    window = nullptr;
+    pos = {};
+    result_delta_text.setString("");
+    result_delta_text.setString("");
+    input_height_text_box = InputTextBox();
+}
+
+bool CornerInterface::isInitialized()
+{
+    return is_initialized;
+}
+
+void CornerInterface::setWindow(RenderWindow* new_window)
+{
+    window = new_window;
+    is_initialized = true;
+    input_height_text_box.setWindow(window);
+    input_height_text_box.transformInputBox({0,0}, {52,1});
+}
+
+void CornerInterface::formatText(TextPresetFunc func, Font &font)
+{
+    func(result_delta_text, font);
+    func(result_height_text, font);
+    input_height_text_box.setPreset(func, font);
+}
+
 CornerInterface::CornerInterface(RenderWindow* new_window, TextPresetFunc func, Font& font): input_height_text_box(new_window)
 {
     window = new_window;
     is_active = true;
+    is_initialized = true;
     setPos({0,0});
 
     func(result_delta_text, font);
@@ -11,7 +43,6 @@ CornerInterface::CornerInterface(RenderWindow* new_window, TextPresetFunc func, 
 
     input_height_text_box.setPreset(func, font);
     input_height_text_box.transformInputBox({0,0}, {52,1});
-
 
     updateTextComposition();
 }

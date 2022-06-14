@@ -1,5 +1,4 @@
 #include "UIEvent.h"
-#include <iostream>
 
 UIEvent::~UIEvent() = default;
 

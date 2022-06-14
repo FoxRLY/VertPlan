@@ -3,8 +3,7 @@
 #include <iostream>
 #include "UIElements/UIConstructor.h"
 #include "InputTextBox.h"
-#include "GridAssets/CornerInterface.h"
-#include "GridAssets/Cells.h"
+#include "GridAssets/GridInterface.h"
 
 using namespace sf;
 
@@ -45,6 +44,8 @@ int main()
     std::vector<UIElement*> grid_element_list;
     std::vector<InputTextBox*> text_box_list;
 
+    GridInterface grid(100, 50, {4,4}, &window, TextPresetGrid, mono);
+
     // Камера
     UIElement* camera = UIConstructor::createCameraBox(&window);
     {
@@ -64,9 +65,6 @@ int main()
         RectShapeBodyPreset(body);
         main_element_list.push_back(redact_check_box);
     }
-
-
-    Cells cells(&window,100, {4,4});
 
     // Подпись к вводу сетки
     Text grid_size_label;
@@ -195,6 +193,7 @@ int main()
                     {
                         char input_char = static_cast<char>(event.text.unicode);
                         InputTextBox::userInputHandle(text_box_list, input_char);
+                        grid.inputEventCheck(input_char);
                     }
                     break;
                 }
@@ -224,16 +223,12 @@ int main()
             UIElement::eventCheckLoop(main_element_list);
             camera_body->applyView();
             UIElement::eventCheckLoop(grid_element_list);
-            if(redact_check_box->getEventResult())
-            {
-                cells.eventCheck();
-            }
+            grid.eventCheck();
             camera_body->resetView();
 
             // Перемещение камеры
             auto* camera_box_event = (GraphNavEvent*)camera->getEvent();
             camera_body->setCameraPos(camera_body->getCameraPos() - camera_box_event->getMouseDelta() * camera_zoom);
-
         }
 
 
@@ -246,7 +241,7 @@ int main()
         window.draw(map_edge);
 
         camera_body->applyView();
-        cells.draw();
+        grid.draw();
         camera_body->resetView();
 
         redact_check_box->draw();

@@ -10,6 +10,7 @@ class CornerInterface
 {
 private:
     bool is_active;
+    bool is_initialized;
     RenderWindow* window;
     Vector2f pos;
     Text result_delta_text;
@@ -17,8 +18,11 @@ private:
     InputTextBox input_height_text_box;
     void updateTextComposition();
 public:
+    CornerInterface();
     CornerInterface(RenderWindow* window, TextPresetFunc func, Font& font);
     CornerInterface(RenderWindow* window, Vector2f new_pos, TextPresetFunc func, Font& font);
+    void setWindow(RenderWindow* new_window);
+    void formatText(TextPresetFunc func, Font& font);
     void setPos(Vector2f new_pos);
     void draw();
     void setDeltaText(std::string new_delta);
@@ -28,5 +32,6 @@ public:
     void eventCheck();
     void setActive(bool state);
     bool inputEventCheck(char input_char);
+    bool isInitialized();
     Vector2f getPos();
 };

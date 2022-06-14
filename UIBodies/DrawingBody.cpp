@@ -1,5 +1,4 @@
 #include "DrawingBody.h"
-#include <iostream>
 #include <cmath>
 
 

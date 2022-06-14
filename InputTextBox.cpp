@@ -1,5 +1,17 @@
 #include "InputTextBox.h"
 
+InputTextBox::InputTextBox()
+{
+    text_box = nullptr;
+    text.setString("");
+}
+
+void InputTextBox::setWindow(RenderWindow *new_window)
+{
+    delete text_box;
+    text_box = UIConstructor::createRectShapeInputTextBox(new_window);
+}
+
 void InputTextBox::userInputHandle(std::vector<InputTextBox *> &input_box_list, char input_char) {
     for (auto input_box: input_box_list) {
         if (InputTextBoxEvent::inputChar(input_box->text_box, input_box->text, input_char)) {

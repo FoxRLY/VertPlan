@@ -49,9 +49,10 @@ void GridInterface::eventCheck()
 
 GridInterface::GridInterface(int cell_pixel_size, float cell_size, RenderWindow* window, TextPresetFunc func, Font& font):
 cells(window, cell_pixel_size),
-corners({0,0}, cell_size, func, font, window),
+corners({0,0}, cell_pixel_size, func, font, window),
 math()
 {
+    setCellSize(cell_size);
 }
 
 GridInterface::GridInterface(int cell_pixel_size, float cell_size, Vector2i dims, RenderWindow *window, TextPresetFunc func,
