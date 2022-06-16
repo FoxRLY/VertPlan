@@ -1,16 +1,5 @@
 #include "InputTextBox.h"
 
-InputTextBox::InputTextBox()
-{
-    text_box = nullptr;
-    text.setString("");
-}
-
-void InputTextBox::setWindow(RenderWindow *new_window)
-{
-    delete text_box;
-    text_box = UIConstructor::createRectShapeInputTextBox(new_window);
-}
 
 void InputTextBox::userInputHandle(std::vector<InputTextBox *> &input_box_list, char input_char) {
     for (auto input_box: input_box_list) {
@@ -35,20 +24,20 @@ void InputTextBox::setPreset(void(*preset_func)(Text &, Font &), Font &font) {
 
 void InputTextBox::setTextPos(Vector2f pos) {
     text.setPosition(pos);
+    text_pos = pos;
 }
 
 void InputTextBox::setTextPos(float x, float y) {
     text.setPosition(x, y);
+    text_pos = {x,y};
 }
 
 void InputTextBox::setInputBoxPos(Vector2f pos) {
-    text_box->getBody()->transform(pos, Vector2f(text_box->getBody()->getGlobalBounds().width,
-                                                 text_box->getBody()->getGlobalBounds().height));
+    text_box->getBody()->transform(pos, box_size);
 }
 
 void InputTextBox::setInputBoxPos(float x, float y) {
-    text_box->getBody()->transform(Vector2f(x, y), Vector2f(text_box->getBody()->getGlobalBounds().width,
-                                                            text_box->getBody()->getGlobalBounds().height));
+    text_box->getBody()->transform(Vector2f(x, y), box_size);
 }
 
 UIElement* InputTextBox::getUIElement()
@@ -63,6 +52,8 @@ const Text& InputTextBox::getText() const
 
 void InputTextBox::transformInputBox(Vector2f pos, Vector2f size)
 {
+    box_pos = pos;
+    box_size = size;
     text_box->getBody()->transform(pos, size);
 }
 

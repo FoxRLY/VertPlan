@@ -9,14 +9,14 @@ void Cells::setDimensions(Vector2i new_dims)
         new_cell_matrix[y] = new UIElement*[new_dims.x];
         for(int x = 0; x < new_dims.x; x++)
         {
-            if(x <= dims.x && y <= dims.y && cell_matrix)
+            if(x < dims.x && y < dims.y && cell_matrix)
             {
                 new_cell_matrix[y][x] = cell_matrix[y][x];
             }
             else
             {
                 new_cell_matrix[y][x] = UIConstructor::createRectShapeCheckBox(window);
-                new_cell_matrix[y][x]->getBody()->transform({(float)x*cell_pixel_size, (float)y*cell_pixel_size},
+                new_cell_matrix[y][x]->getBody()->transform({(float)x*cell_pixel_size+10, (float)y*cell_pixel_size+10},
                                                             {(float)cell_pixel_size, (float)cell_pixel_size});
                 RectShapeBodyPresetGrid((RectShapeBody*)new_cell_matrix[y][x]->getBody());
             }
@@ -24,7 +24,7 @@ void Cells::setDimensions(Vector2i new_dims)
     }
     if(new_dims.x < dims.x)
     {
-        for(int x = new_dims.x-1; x < dims.x-1; x++)
+        for(int x = new_dims.x; x < dims.x; x++)
         {
             for(int y = 0; y < new_dims.y; y++)
             {
@@ -34,7 +34,7 @@ void Cells::setDimensions(Vector2i new_dims)
     }
     if(new_dims.y < dims.y)
     {
-        for(int y = new_dims.y-1; y < dims.y-1; y++)
+        for(int y = new_dims.y; y < dims.y; y++)
         {
             delete[] cell_matrix[y];
         }

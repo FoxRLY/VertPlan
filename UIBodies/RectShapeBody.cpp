@@ -127,3 +127,12 @@ void RectShapeBodyPresetGrid(RectShapeBody* button_body)
     button_body->setClickColor(Color(120,120,120,255));
     button_body->setDisabledColor(Color(120,120,120,255));
 }
+
+void RectShapeBodyInputBoxPreset(RectShapeBody* button_body)
+{
+    button_body->setOutline(-0.5);
+    button_body->setRestingColor(Color(150,150,150,255));
+    button_body->setHoverColor(Color(0,102,204,255));
+    button_body->setClickColor(Color(120,120,120,255));
+    button_body->setDisabledColor(Color(90,90,90,255));
+}

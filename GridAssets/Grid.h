@@ -41,7 +41,7 @@ public:
     void setDimensions(std::array<int,2> new_dims);
     const std::array<int, 2>& getDimensions();
     void updateCells(const std::vector<std::vector<bool>>& cells);
-    void updateCorners(const std::vector<std::vector<CornerInterface>>& corners);
+    void updateCorners(const std::vector<std::vector<float>>& corners);
     void setCellSize(float new_size);
     float getCellSize() const;
     const std::vector<bool>& getCells();

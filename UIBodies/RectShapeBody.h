@@ -39,5 +39,6 @@ public:
 
 void RectShapeBodyPreset(RectShapeBody* button_body);
 void RectShapeBodyPresetGrid(RectShapeBody* button_body);
+void RectShapeBodyInputBoxPreset(RectShapeBody* button_body);
 
 

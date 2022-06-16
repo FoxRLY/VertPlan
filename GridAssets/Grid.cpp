@@ -121,13 +121,13 @@ void Grid::updateCells(const std::vector<std::vector<bool>>& cells)
     }
 }
 
-void Grid::updateCorners(const std::vector<std::vector<CornerInterface>>& corners)
+void Grid::updateCorners(const std::vector<std::vector<float>>& corners)
 {
-    for(int y = 0; y < dimensions[1]; y++)
+    for(int y = 0; y < dimensions[1]+1; y++)
     {
-        for(int x = 0; x < dimensions[0]; x++)
+        for(int x = 0; x < dimensions[0]+1; x++)
         {
-            grid_corners[y][x].height = corners[y][x].getInputHeight();
+            grid_corners[y][x].height = corners[y][x];
         }
     }
 }

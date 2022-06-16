@@ -6,7 +6,7 @@
 class Corners
 {
 private:
-    std::vector<std::vector<CornerInterface>> corner_matrix;
+    CornerInterface*** corner_matrix;
     Vector2i dims;
     Vector2f pos;
     int cell_pixel_size;
@@ -20,7 +20,7 @@ public:
     void setPos(Vector2f new_pos);
     void setCellPixelSize(int new_cell_size);
     void updateCornerSwitching(const std::vector<std::vector<Corner>>& matrix);
-    const std::vector<std::vector<CornerInterface>>& getHeightMap();
+    std::vector<std::vector<float>> getHeightMap();
     void updateCornerData(const std::vector<std::vector<Corner>>& matrix);
     void hideCorners();
     void eventCheck();

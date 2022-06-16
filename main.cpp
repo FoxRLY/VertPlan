@@ -44,8 +44,8 @@ int main()
     std::vector<UIElement*> grid_element_list;
     std::vector<InputTextBox*> text_box_list;
 
-    GridInterface grid(100, 50, {4,4}, &window, TextPresetGrid, mono);
-
+    GridInterface grid(300, 10, {4,4}, &window, TextPresetGrid, mono);
+    grid.setDimensions({3,3});
     // Камера
     UIElement* camera = UIConstructor::createCameraBox(&window);
     {
@@ -111,9 +111,9 @@ int main()
 // Кол-во клеток по горизонтали
     InputTextBox grid_x_input(&window);
     {
-        grid_x_input.setString("");
         grid_x_input.setTextPos(212, 10);
         grid_x_input.setPreset(TextPreset, mono);
+        grid_x_input.setString("4");
         grid_x_input.transformInputBox(Vector2f(210, 10), Vector2f(60, 30));
         main_element_list.push_back(grid_x_input.getUIElement());
         text_box_list.push_back(&grid_x_input);
@@ -122,9 +122,9 @@ int main()
     // Кол-во клеток по горизонтали
     InputTextBox grid_y_input(&window);
     {
-        grid_y_input.setString("");
-        grid_y_input.setTextPos(312, 10);
         grid_y_input.setPreset(TextPreset, mono);
+        grid_y_input.setString("4");
+        grid_y_input.setTextPos(312, 10);
         grid_y_input.transformInputBox(Vector2f(310, 10), Vector2f(60, 30));
         main_element_list.push_back(grid_y_input.getUIElement());
         text_box_list.push_back(&grid_y_input);
@@ -133,9 +133,9 @@ int main()
     // Размер квадратов
     InputTextBox grid_square_input(&window);
     {
-        grid_square_input.setString("");
-        grid_square_input.setTextPos(Vector2f(650, 10));
         grid_square_input.setPreset(TextPreset, mono);
+        grid_square_input.setString("10");
+        grid_square_input.setTextPos(Vector2f(650, 10));
         grid_square_input.transformInputBox(Vector2f(650, 10), Vector2f(60, 30));
         main_element_list.push_back(grid_square_input.getUIElement());
         text_box_list.push_back(&grid_square_input);
