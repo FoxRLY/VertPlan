@@ -17,7 +17,7 @@ CornerInterface::CornerInterface(RenderWindow* new_window, TextPresetFunc func, 
 
     input_height_text_box.setPreset(func, font);
     input_height_text_box.transformInputBox({0,0}, {90,30});
-    RectShapeBodyPresetGrid((RectShapeBody*)input_height_text_box.getUIElement()->getBody());
+    RectShapeBodyInputBoxPreset((RectShapeBody*)input_height_text_box.getUIElement()->getBody());
 
     updateTextComposition();
 }

@@ -16,7 +16,7 @@ void Cells::setDimensions(Vector2i new_dims)
             else
             {
                 new_cell_matrix[y][x] = UIConstructor::createRectShapeCheckBox(window);
-                new_cell_matrix[y][x]->getBody()->transform({(float)x*cell_pixel_size+10, (float)y*cell_pixel_size+10},
+                new_cell_matrix[y][x]->getBody()->transform({(float)x*cell_pixel_size+x*1, (float)y*cell_pixel_size+y*1},
                                                             {(float)cell_pixel_size, (float)cell_pixel_size});
                 RectShapeBodyPresetGrid((RectShapeBody*)new_cell_matrix[y][x]->getBody());
             }
@@ -64,16 +64,22 @@ void Cells::setCellPixelSize(int size)
 
 void Cells::setActive(bool state)
 {
-    is_active = state;
+    for (int x = 0; x < dims.x; x++)
+    {
+        for (int y = 0; y < dims.y; y++)
+        {
+            cell_matrix[y][x]->setEventEnabled(state);
+        }
+    }
 }
 
 void Cells::eventCheck()
 {
-    if(is_active) {
-        for (int x = 0; x < dims.x; x++) {
-            for (int y = 0; y < dims.y; y++) {
-                cell_matrix[y][x]->eventCheck();
-            }
+    for (int x = 0; x < dims.x; x++)
+    {
+        for (int y = 0; y < dims.y; y++)
+        {
+            cell_matrix[y][x]->eventCheck();
         }
     }
 }

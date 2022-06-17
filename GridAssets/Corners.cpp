@@ -25,7 +25,7 @@ void Corners::setDimensions(Vector2i new_dims)
             else
             {
                 new_corner_matrix[y][x] = new CornerInterface(window, preset_func, font);
-                new_corner_matrix[y][x]->setPos({(float)x*cell_pixel_size,(float)y*cell_pixel_size});
+                new_corner_matrix[y][x]->setPos({(float)x*cell_pixel_size+x*1,(float)y*cell_pixel_size+y*1});
             }
         }
     }
@@ -114,7 +114,19 @@ void Corners::updateCornerData(const std::vector<std::vector<Corner>>& matrix)
     {
         for(int x = 0; x < dims.x; x++)
         {
-            corner_matrix[y][x]->setDeltaText(std::to_string(matrix[y][x].delta));
+            std::string delta = std::to_string(matrix[y][x].delta);
+            int count = 0;
+            for(auto c: delta)
+            {
+                if(c == '.')
+                {
+                    count += 4;
+                    break;
+                }
+                count++;
+            }
+            delta.resize(count);
+            corner_matrix[y][x]->setDeltaText(delta);
         }
     }
 }

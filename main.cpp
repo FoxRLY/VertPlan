@@ -44,8 +44,10 @@ int main()
     std::vector<UIElement*> grid_element_list;
     std::vector<InputTextBox*> text_box_list;
 
-    GridInterface grid(300, 10, {4,4}, &window, TextPresetGrid, mono);
-    grid.setDimensions({3,3});
+    Vector2i grid_dims = {4,4};
+    GridInterface grid(170, 10, grid_dims, &window, TextPresetGrid, mono);
+
+
     // Камера
     UIElement* camera = UIConstructor::createCameraBox(&window);
     {
@@ -190,7 +192,7 @@ int main()
                     float delta = event.mouseWheelScroll.delta;
                     float camera_zoom_prev = camera_zoom;
                     camera_zoom -= delta*0.1f;
-                    if(camera_zoom <= 0 || camera_zoom >= 2)
+                    if(camera_zoom <= 0 || camera_zoom >= 5)
                     {
                         camera_zoom = camera_zoom_prev;
                     }
@@ -241,21 +243,29 @@ int main()
             camera_body->setCameraPos(camera_body->getCameraPos() - camera_box_event->getMouseDelta() * camera_zoom);
         }
 
-        if(prev_redact_flag && !redact_check_box->getEventResult())
-        {
-            grid.setCellsActive(false);
-            grid.updateGridStructure();
+        int input_grid_x;
+        try {
+            input_grid_x = std::stoi(static_cast<std::string>(grid_x_input.getText().getString()));
+            if(input_grid_x != grid_dims.x)
+            {
+                grid_dims.x = input_grid_x;
+                grid.setDimensions(grid_dims);
+            }
+        } catch(...){
         }
-        if(!prev_redact_flag && redact_check_box->getEventResult())
-        {
-            grid.setCellsActive(true);
-            grid.hideCorners();
+
+        int input_grid_y;
+        try {
+            input_grid_y = std::stoi(static_cast<std::string>(grid_y_input.getText().getString()));
+            if(input_grid_y != grid_dims.y)
+            {
+                grid_dims.y = input_grid_y;
+                grid.setDimensions(grid_dims);
+            }
+        } catch(...){
         }
-        prev_redact_flag = redact_check_box->getEventResult();
-        if(!prev_redact_flag && solve_button->getEventResult())
-        {
-            grid.solveGrid();
-        }
+
+
 
 
         // Фаза отрисовки элементов
@@ -286,5 +296,19 @@ int main()
         window.display();
 
 
+        if(!redact_check_box->getEventResult())
+        {
+            grid.setCellsActive(false);
+            grid.updateGridStructure();
+        }
+        if(redact_check_box->getEventResult())
+        {
+            grid.setCellsActive(true);
+            grid.hideCorners();
+        }
+        if(!redact_check_box->getEventResult() && solve_button->getEventResult())
+        {
+            grid.solveGrid();
+        }
     }
 }

@@ -10,7 +10,6 @@ private:
     Vector2i dims;
     RenderWindow* window;
     int cell_pixel_size;
-    bool is_active = true;
 public:
     Cells(RenderWindow* new_window, int new_size);
     Cells(RenderWindow* new_window, int new_size, Vector2i new_dims);

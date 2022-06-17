@@ -9,6 +9,7 @@ private:
     Grid math;
     Corners corners;
     Cells cells;
+
 public:
     GridInterface(int cell_pixel_size, float cell_size, RenderWindow* window, TextPresetFunc func, Font& font);
     GridInterface(int cell_pixel_size, float cell_size, Vector2i dims, RenderWindow* window, TextPresetFunc func, Font& font);
