@@ -3,6 +3,17 @@
 
 CameraBody::CameraBody(RenderWindow *new_window) : UIElementBody(new_window)
 {
+    default_view = new_window->getDefaultView();
+}
+
+void CameraBody::setDefaultView(View new_view)
+{
+    default_view = new_view;
+}
+
+View CameraBody::getDefaultView()
+{
+    return default_view;
 }
 
 void CameraBody::applyView()
@@ -13,7 +24,7 @@ void CameraBody::applyView()
 void CameraBody::resetView()
 {
 
-    window->setView(window->getDefaultView());
+    window->setView(default_view);
 }
 
 RectangleShape CameraBody::shapeToView(View &new_view)

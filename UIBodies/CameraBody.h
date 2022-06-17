@@ -6,6 +6,7 @@ class CameraBody : public UIElementBody
 private:
     RectangleShape shape;
     View view;
+    View default_view;
     RectangleShape shapeToView(View& new_view);
     View viewToShape(RectangleShape& new_shape);
     Vector2f rectPosToViewPos(Vector2f pos);
@@ -19,6 +20,8 @@ public:
     void setZoom(float factor);
     void setViewSize(Vector2f size);
     View getView();
+    void setDefaultView(View new_view);
+    View getDefaultView();
     void applyView();
     void resetView();
 

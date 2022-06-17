@@ -60,7 +60,6 @@ int main()
     float camera_zoom = 1.0f;
 
     // Галка "Редактировать"
-    bool prev_redact_flag = false;
     UIElement* redact_check_box = UIConstructor::createRectShapeCheckBox(&window);
     {
         auto body = (RectShapeBody*)redact_check_box->getBody();
@@ -146,7 +145,7 @@ int main()
     // Края карты
     RectangleShape map_edge;
     {
-        map_edge.setSize(Vector2f(videoMode.width, videoMode.height));
+        map_edge.setSize(Vector2f(videoMode.width*1.2, videoMode.height*1.2));
         map_edge.setPosition(Vector2f(0, 50));
         map_edge.setOutlineThickness(1);
         map_edge.setOutlineColor(Color::Black);
@@ -192,11 +191,11 @@ int main()
                     float delta = event.mouseWheelScroll.delta;
                     float camera_zoom_prev = camera_zoom;
                     camera_zoom -= delta*0.1f;
-                    if(camera_zoom <= 0 || camera_zoom >= 5)
+                    if(camera_zoom <= 1 || camera_zoom >= 5)
                     {
                         camera_zoom = camera_zoom_prev;
                     }
-                    camera_body->setViewSize(window.getDefaultView().getSize()*camera_zoom);
+                    camera_body->setViewSize(camera_body->getDefaultView().getSize()*camera_zoom);
                     break;
                 }
                 case Event::TextEntered:
@@ -226,6 +225,14 @@ int main()
                 {
                     has_focus = false;
                     break;
+                }
+                case Event::Resized:
+                {
+                    sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+                    camera_body->setDefaultView(sf::View(visibleArea));
+                    camera_body->setDisplayRect(Vector2f(0,50), Vector2f((float)event.size.width, (float)event.size.height));
+                    camera_body->setViewSize(camera_body->getDefaultView().getSize()*camera_zoom);
+                    window.setView(sf::View(visibleArea));
                 }
             }
         }
