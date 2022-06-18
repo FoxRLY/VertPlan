@@ -54,7 +54,7 @@ int main()
         auto camera_body = (CameraBody*)camera->getBody();
         camera_body->setDisplayRect(Vector2f(0,50), Vector2f((float)videoMode.width, (float)videoMode.height));
         camera_body->setViewSize(window.getView().getSize());
-        camera_body->setCameraPos(Vector2f(0, 0));
+        camera_body->setCameraPos(Vector2f(-50, -100));
         main_element_list.push_back(camera);
     }
     float camera_zoom = 1.0f;
@@ -64,7 +64,7 @@ int main()
     {
         auto body = (RectShapeBody*)redact_check_box->getBody();
         body->transform(Vector2f(1050, 10), Vector2f(30, 30));
-        redact_check_box->setEventResult(true);
+        //redact_check_box->setEventResult(true);
         RectShapeBodyPreset(body);
         main_element_list.push_back(redact_check_box);
     }
@@ -72,7 +72,7 @@ int main()
     UIElement* solve_button = UIConstructor::createRectShapeButton(&window);
     {
         auto body = (RectShapeBody*)solve_button->getBody();
-        body->transform({1100,10},{30,30});
+        body->transform({1225,10},{30,30});
         RectShapeBodyPreset(body);
         main_element_list.push_back(solve_button);
     }
@@ -109,6 +109,14 @@ int main()
         grid_redact_label.setPosition(740, 10);
     }
 
+    // Подпись "Решить"
+    Text grid_solve_label;
+    {
+        TextPreset(grid_solve_label, mono);
+        grid_solve_label.setString(L"Решить:");
+        grid_solve_label.setPosition(1110, 10);
+    }
+
 // Кол-во клеток по горизонтали
     InputTextBox grid_x_input(&window);
     {
@@ -132,6 +140,7 @@ int main()
     }
 
     // Размер квадратов
+    float grid_square_value = 10;
     InputTextBox grid_square_input(&window);
     {
         grid_square_input.setPreset(TextPreset, mono);
@@ -166,6 +175,14 @@ int main()
         grid_square_input_edge.setPosition(Vector2f(0, 0));
         grid_square_input_edge.setOutlineThickness(1);
         grid_square_input_edge.setOutlineColor(Color::Black);
+    }
+
+    RectangleShape grid_redact_edge;
+    {
+        grid_redact_edge.setSize(Vector2f(1100, 50));
+        grid_redact_edge.setPosition(0,0);
+        grid_redact_edge.setOutlineThickness(1);
+        grid_redact_edge.setOutlineColor(Color::Black);
     }
 
     // Флаг фокуса окна
@@ -212,7 +229,7 @@ int main()
                 {
                     if(event.mouseButton.button == Mouse::Right)
                     {
-                        camera_body->setCameraPos({0,0});
+                        camera_body->setCameraPos({-50,-100});
                     }
                     break;
                 }
@@ -269,17 +286,27 @@ int main()
                 grid_dims.y = input_grid_y;
                 grid.setDimensions(grid_dims);
             }
-        } catch(...){
-        }
+        } catch(...){}
 
+        float input_cell_size;
+        try {
+            input_cell_size = std::stof(static_cast<std::string>(grid_square_input.getText().getString()));
+            if(input_cell_size != grid_square_value)
+            {
+                grid_square_value = input_cell_size;
+                grid.setCellSize(grid_square_value);
+            }
+        } catch(...){}
 
 
 
         // Фаза отрисовки элементов
         window.clear(Color::White);
 
+        window.draw(grid_redact_edge);
         window.draw(grid_square_input_edge);
         window.draw(grid_size_input_edge);
+
         window.draw(map_edge);
 
         camera_body->applyView();
@@ -298,6 +325,7 @@ int main()
         window.draw(grid_size_sign_label);
         window.draw(grid_square_size_label);
         window.draw(grid_redact_label);
+        window.draw(grid_solve_label);
 
         // Вывод изображения
         window.display();

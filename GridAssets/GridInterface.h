@@ -7,10 +7,13 @@
 class GridInterface
 {
 private:
+    RenderWindow* window;
     Grid math;
     Corners corners;
     Cells cells;
     Signs signs;
+    Text zero_work_value;
+    Text zero_work_label;
 
 public:
     GridInterface(int cell_pixel_size, float cell_size, RenderWindow* window, TextPresetFunc func, Font& font);

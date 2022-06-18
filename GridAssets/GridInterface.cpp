@@ -30,6 +30,8 @@ void GridInterface::draw()
     cells.draw();
     corners.draw();
     signs.draw();
+    window->draw(zero_work_label);
+    window->draw(zero_work_value);
 }
 
 void GridInterface::hideCorners()
@@ -49,6 +51,7 @@ void GridInterface::solveGrid()
     math.updateCorners(corners.getHeightMap());
     math.solveGrid();
     corners.updateCornerData(math.getCorners());
+    zero_work_value.setString(std::to_string(math.getMedianHeight()));
 }
 
 void GridInterface::inputEventCheck(char input_char)
@@ -62,12 +65,18 @@ void GridInterface::eventCheck()
     cells.eventCheck();
 }
 
-GridInterface::GridInterface(int cell_pixel_size, float cell_size, RenderWindow* window, TextPresetFunc func, Font& font):
-cells(window, cell_pixel_size),
-corners({0,0}, cell_pixel_size, func, font, window),
+GridInterface::GridInterface(int cell_pixel_size, float cell_size, RenderWindow* new_window, TextPresetFunc func, Font& font):
+cells(new_window, cell_pixel_size),
+corners({0,0}, cell_pixel_size, func, font, new_window),
 math(),
-signs(window, func, font, {0,0}, {0,0}, cell_pixel_size)
+signs(new_window, func, font, {0,0}, {0,0}, cell_pixel_size)
 {
+    window = new_window;
+    func(zero_work_label, font);
+    zero_work_label.setString(L"Высота нулевой работы:");
+    zero_work_label.setPosition(-25, -100);
+    func(zero_work_value, font);
+    zero_work_value.setPosition(260, -100);
     setCellSize(cell_size);
 }
 
