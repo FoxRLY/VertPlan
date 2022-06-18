@@ -1,19 +1,21 @@
 cmake_minimum_required(VERSION 3.20)
-
 project(VertPlan)
-set(CMAKE_BUILD_TYPE Debug)
+
+
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_BUILD_TYPE Release)
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     message("Windows build")
-    set(SFML_DIR "c:/SFML/lib/cmake/SFML")
+    set(SFML_DIR "SFML/lib/cmake/SFML")
     if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-        set(CMAKE_CXX_FLAGS_RELEASE "-mwindows")
-        set(CMAKE_CXX_FLAGS_RELEASE "-Og")
+        message("Release build")
+        set(CMAKE_CXX_FLAGS_RELEASE "-mwindows -o3")
     endif()
 elseif(${CMAKE_SYSTEM_NAME} STREQUAL "Linux")
     message("Linux build")
     if(${CMAKE_BUILD_TYPE} STREQUAL "Release")
-        set(CMAKE_CXX_FLAGS_RELEASE "-0g")
+        message("Release build")
+        set(CMAKE_CXX_FLAGS_RELEASE "-o3")
     endif()
 endif()
 
