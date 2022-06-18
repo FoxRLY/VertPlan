@@ -9,6 +9,7 @@ void GridInterface::setCellPixelSize(int cell_size)
 {
     corners.setCellPixelSize(cell_size);
     cells.setCellPixelSize(cell_size);
+    signs.setCellSize(cell_size);
 }
 
 void GridInterface::setCellSize(float cell_size)
@@ -21,12 +22,14 @@ void GridInterface::setDimensions(Vector2i new_dims)
     math.setDimensions({new_dims.x, new_dims.y});
     corners.setDimensions({new_dims.x+1, new_dims.y+1});
     cells.setDimensions(new_dims);
+    signs.setDimensions({new_dims.x+1, new_dims.y+1});
 }
 
 void GridInterface::draw()
 {
     cells.draw();
     corners.draw();
+    signs.draw();
 }
 
 void GridInterface::hideCorners()
@@ -62,7 +65,8 @@ void GridInterface::eventCheck()
 GridInterface::GridInterface(int cell_pixel_size, float cell_size, RenderWindow* window, TextPresetFunc func, Font& font):
 cells(window, cell_pixel_size),
 corners({0,0}, cell_pixel_size, func, font, window),
-math()
+math(),
+signs(window, func, font, {0,0}, {0,0}, cell_pixel_size)
 {
     setCellSize(cell_size);
 }

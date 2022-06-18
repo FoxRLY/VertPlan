@@ -2,6 +2,7 @@
 #include "Corners.h"
 #include "Cells.h"
 #include "Grid.h"
+#include "Signs.h"
 
 class GridInterface
 {
@@ -9,6 +10,7 @@ private:
     Grid math;
     Corners corners;
     Cells cells;
+    Signs signs;
 
 public:
     GridInterface(int cell_pixel_size, float cell_size, RenderWindow* window, TextPresetFunc func, Font& font);
