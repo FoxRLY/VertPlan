@@ -1,27 +1,26 @@
 #include "UIElement.h"
 
-UIElement::UIElement(UIElementBody* new_body, UIEvent* new_event)
-{
-    body = new_body;
-    event = new_event;
-}
+UIElement::UIElement(std::shared_ptr<UIElementBody>& new_body, std::shared_ptr<UIEvent>& new_event):
+body(new_body),
+event(new_event)
+{}
 
-UIElementBody *UIElement::getBody()
+std::shared_ptr<UIElementBody> UIElement::getBody()
 {
     return body;
 }
 
-UIEvent *UIElement::getEvent()
+std::shared_ptr<UIEvent> UIElement::getEvent()
 {
     return event;
 }
 
-void UIElement::setBody(UIElementBody *new_body)
+[[maybe_unused]] void UIElement::setBody(std::shared_ptr<UIElementBody>& new_body)
 {
     body = new_body;
 }
 
-void UIElement::setEvent(UIEvent *new_event)
+void UIElement::setEvent(std::shared_ptr<UIEvent>& new_event)
 {
     event = new_event;
 }
@@ -62,12 +61,6 @@ void UIElement::setEventResult(bool new_result)
 void UIElement::draw()
 {
     body->draw();
-}
-
-UIElement::~UIElement()
-{
-    delete body;
-    delete event;
 }
 
 

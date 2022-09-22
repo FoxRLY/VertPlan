@@ -12,7 +12,7 @@ private:
     Color resting_color;
     Color disabled_color;
 public:
-    explicit RectShapeBody(RenderWindow* new_window);
+    explicit RectShapeBody(std::weak_ptr<RenderWindow> new_window);
     void setClickColor(Color new_color);
     void setHoverColor(Color new_color);
     void setRestingColor(Color new_color);
@@ -36,9 +36,5 @@ public:
 
     void draw() override;
 };
-
-void RectShapeBodyPreset(RectShapeBody* button_body);
-void RectShapeBodyPresetGrid(RectShapeBody* button_body);
-void RectShapeBodyInputBoxPreset(RectShapeBody* button_body);
 
 

@@ -1,9 +1,17 @@
 #include "CameraBody.h"
 
 
-CameraBody::CameraBody(RenderWindow *new_window) : UIElementBody(new_window)
+CameraBody::CameraBody(std::weak_ptr<RenderWindow> new_window) : UIElementBody(std::move(new_window))
 {
-    default_view = new_window->getDefaultView();
+    auto window_ptr = window.lock();
+    if(window_ptr)
+    {
+        default_view = window_ptr->getDefaultView();
+    }
+    else
+    {
+        throw std::runtime_error("No window to draw on");
+    }
 }
 
 void CameraBody::setDefaultView(View new_view)
@@ -18,46 +26,76 @@ View CameraBody::getDefaultView()
 
 void CameraBody::applyView()
 {
-    window->setView(view);
+
+    auto window_ptr = window.lock();
+    if(window_ptr)
+    {
+        window_ptr->setView(view);
+    }
+    else
+    {
+        throw std::runtime_error("No window to draw on");
+    }
 }
 
 void CameraBody::resetView()
 {
-
-    window->setView(default_view);
+    auto window_ptr = window.lock();
+    if(window_ptr)
+    {
+        window_ptr->setView(default_view);
+    }
+    else
+    {
+        throw std::runtime_error("No window to draw on");
+    }
 }
 
-RectangleShape CameraBody::shapeToView(View &new_view)
+[[maybe_unused]] RectangleShape CameraBody::shapeToView(View &new_view)
 {
     RectangleShape new_shape;
-    Vector2f size(new_view.getViewport().width*(float)window->getSize().x,
-                  new_view.getViewport().height*(float)window->getSize().y);
-    Vector2f pos(new_view.getViewport().left*(float)window->getSize().x,
-                 new_view.getViewport().top*(float)window->getSize().y);
-    new_shape.setSize(size);
-    new_shape.setPosition(pos);
+    auto window_ptr = window.lock();
+    if(window_ptr)
+    {
+        Vector2f size(new_view.getViewport().width*(float)window_ptr->getSize().x,
+                      new_view.getViewport().height*(float)window_ptr->getSize().y);
+        Vector2f pos(new_view.getViewport().left*(float)window_ptr->getSize().x,
+                     new_view.getViewport().top*(float)window_ptr->getSize().y);
+        new_shape.setSize(size);
+        new_shape.setPosition(pos);
+    }
+    else
+    {
+        throw std::runtime_error("No window to draw on");
+    }
     return new_shape;
 }
 View CameraBody::viewToShape(RectangleShape& new_shape)
 {
     View new_view;
-    FloatRect rect;
-    rect.width = new_shape.getSize().x / (float)window->getSize().x;
-    rect.height = new_shape.getSize().y / (float)window->getSize().y;
-    rect.left = new_shape.getPosition().x / (float)window->getSize().x;
-    rect.top = new_shape.getPosition().y / (float)window->getSize().y;
-    new_view.setViewport(rect);
+    auto window_ptr = window.lock();
+    if(window_ptr)
+    {
+        FloatRect rect;
+        rect.width = new_shape.getSize().x / (float)window_ptr->getSize().x;
+        rect.height = new_shape.getSize().y / (float)window_ptr->getSize().y;
+        rect.left = new_shape.getPosition().x / (float)window_ptr->getSize().x;
+        rect.top = new_shape.getPosition().y / (float)window_ptr->getSize().y;
+        new_view.setViewport(rect);
+    }
+    else
+    {
+        throw std::runtime_error("No window to draw on");
+    }
     return new_view;
 }
 Vector2f CameraBody::rectPosToViewPos(Vector2f pos)
 {
-    return Vector2f(pos.x + shape.getSize().x/2.0,
-                    pos.y + shape.getSize().y/2.0);
+    return {pos.x + shape.getSize().x/2.0f,pos.y + shape.getSize().y/2.0f};
 }
 Vector2f CameraBody::viewPosToRectPos(Vector2f pos)
 {
-    return Vector2f(pos.x - shape.getSize().x/2.0,
-                    pos.y - shape.getSize().y/2.0);
+    return {pos.x - shape.getSize().x/2.0f,pos.y - shape.getSize().y/2.0f};
 }
 
 void CameraBody::setDisplayRect(Vector2f pos, Vector2f size)
@@ -67,12 +105,12 @@ void CameraBody::setDisplayRect(Vector2f pos, Vector2f size)
     view = viewToShape(shape);
 }
 
-View CameraBody::getView()
+[[maybe_unused]] View CameraBody::getView()
 {
     return view;
 }
 
-void CameraBody::setZoom(float factor)
+[[maybe_unused]] void CameraBody::setZoom(float factor)
 {
     view.zoom(factor);
 }
@@ -87,7 +125,7 @@ void CameraBody::setCameraPos(Vector2f pos)
     view.setCenter(rectPosToViewPos(pos));
 }
 
-void CameraBody::setCameraCenter(Vector2f pos)
+[[maybe_unused]] void CameraBody::setCameraCenter(Vector2f pos)
 {
     view.setCenter(pos);
 }

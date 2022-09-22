@@ -1,5 +1,6 @@
 #pragma once
 #include "UIElement.h"
+#include "memory.h"
 #include "../UIBodies/RectShapeBody.h"
 #include "../UIBodies/DrawingBody.h"
 #include "../UIBodies/CameraBody.h"
@@ -13,7 +14,7 @@ class UIConstructor
 {
 private:
 public:
-    static UIElement* createRectShapeButton(RenderWindow* window);
+    static UIElement* createRectShapeButton(std::weak_ptr<RenderWindow>& window);
     static UIElement* createRectShapeCheckBox(RenderWindow* window);
     static UIElement* createRectShapeInputTextBox(RenderWindow* window);
     static UIElement* createDrawingBox(RenderWindow* window);

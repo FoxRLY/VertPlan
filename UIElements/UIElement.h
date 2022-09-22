@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include <SFML/Graphics.hpp>
 #include "../UIBodies/UIElementBody.h"
 #include "../UIEvents/UIEvent.h"
@@ -8,8 +9,8 @@ using namespace sf;
 class UIElement
 {
 private:
-    UIElementBody* body;
-    UIEvent* event;
+    std::shared_ptr<UIElementBody> body;
+    std::shared_ptr<UIEvent> event;
 public:
     static void eventCheckLoop(std::vector<UIElement*>& event_list);
 
@@ -19,11 +20,12 @@ public:
     virtual bool getEventResult();
     virtual void setEventResult(bool new_result);
     virtual void draw();
-    virtual ~UIElement();
+    virtual ~UIElement() = default;
 
-    UIElement(UIElementBody* new_body, UIEvent* new_event);
-    UIElementBody* getBody();
-    UIEvent* getEvent();
-    void setBody(UIElementBody* new_body);
-    void setEvent(UIEvent* new_event);
+    UIElement(std::shared_ptr<UIElementBody>& new_body, std::shared_ptr<UIEvent>& new_event);
+    std::shared_ptr<UIElementBody> getBody();
+    std::shared_ptr<UIEvent> getEvent();
+
+    [[maybe_unused]] void setBody(std::shared_ptr<UIElementBody>& new_body);
+    [[maybe_unused]] void setEvent(std::shared_ptr<UIEvent>& new_event);
 };

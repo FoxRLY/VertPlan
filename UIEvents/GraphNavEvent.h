@@ -1,11 +1,12 @@
 #pragma once
 #include "../UIElements/UIElement.h"
+#include <memory>
 
 class GraphNavEvent : public UIEvent
 {
 private:
-    RenderWindow* window;
-    UIElementBody* body;
+    std::weak_ptr<RenderWindow> window;
+    std::shared_ptr<UIElementBody> body;
     bool hover;
     Vector2f prev_mouse_pos;
     Vector2f mouse_pos_delta;
@@ -13,7 +14,7 @@ private:
     bool center_graph_flag;
 
 public:
-    GraphNavEvent(UIElementBody* new_body, RenderWindow* new_window)
+    GraphNavEvent(std::shared_ptr<UIElementBody>& new_body, std::weak_ptr<RenderWindow>& new_window)
     {
         body = new_body;
         window = new_window;
@@ -22,11 +23,11 @@ public:
         hover = false;
     }
     Vector2f getMouseDelta();
-    bool getCenterGraphFlag()
+    [[maybe_unused]] [[nodiscard]] bool getCenterGraphFlag() const
     {
         return center_graph_flag;
     }
-    bool isHovering()
+    [[maybe_unused]] [[nodiscard]] bool isHovering() const
     {
         return hover;
     }

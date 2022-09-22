@@ -1,18 +1,19 @@
 #include "UIElementBody.h"
 
+#include <utility>
+
 UIElementBody::~UIElementBody() = default;
 
-UIElementBody::UIElementBody(RenderWindow *new_window)
+UIElementBody::UIElementBody(std::weak_ptr<RenderWindow> new_window): window(std::move(new_window))
 {
-    window = new_window;
 }
 
-void UIElementBody::setWindow(RenderWindow *new_window)
+void UIElementBody::setWindow(std::weak_ptr<RenderWindow> new_window)
 {
-    window = new_window;
+    window = std::move(new_window);
 }
 
-RenderWindow *UIElementBody::getWindow()
+std::weak_ptr<RenderWindow> UIElementBody::getWindow()
 {
-    return window;
+    return window.;
 }

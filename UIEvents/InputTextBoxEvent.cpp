@@ -1,9 +1,9 @@
 #include "InputTextBoxEvent.h"
 
-InputTextBoxEvent::InputTextBoxEvent(UIElementBody *new_body, RenderWindow *new_window)
+InputTextBoxEvent::InputTextBoxEvent(std::shared_ptr<UIElementBody>&  new_body, std::weak_ptr<RenderWindow>& new_window):
+window(new_window),
+body(new_body)
 {
-    window = new_window;
-    body = new_body;
 }
 
 void InputTextBoxEvent::addChar(char c, Text& input_text)
@@ -26,7 +26,7 @@ void InputTextBoxEvent::addChar(char c, Text& input_text)
 
 bool RectShapeInputBoxEvent::check()
 {
-    auto* rect_body = (RectShapeBody*)body;
+    auto rect_body = std::dynamic_pointer_cast<RectShapeBody>(body);
     if(!is_enabled)
     {
         rect_body->paintDisabled();
@@ -40,7 +40,16 @@ bool RectShapeInputBoxEvent::check()
         return event_result;
     }
     sf::Vector2i pixelPos = getMousePos(window);
-    sf::Vector2f worldPos = window->mapPixelToCoords(pixelPos);
+    auto window_ptr = window.lock();
+    sf::Vector2f worldPos;
+    if(window_ptr)
+    {
+        worldPos = window_ptr->mapPixelToCoords(pixelPos);
+    }
+    else
+    {
+        throw std::runtime_error("No window to draw on");
+    }
     if(rect_body->mouseHover(worldPos))
     {
         if(isMouseKeyPressed(Mouse::Left))

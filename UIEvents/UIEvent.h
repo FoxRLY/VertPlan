@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <memory>
 
 using namespace sf;
 
@@ -8,7 +9,7 @@ class UIEvent
 protected:
     bool event_result;
     bool is_enabled;
-    static Vector2i getMousePos(RenderWindow* window);
+    static Vector2i getMousePos(const std::weak_ptr<RenderWindow>& window);
     static bool isKeyPressed(Keyboard::Key);
     static bool isMouseKeyPressed(Mouse::Button);
 

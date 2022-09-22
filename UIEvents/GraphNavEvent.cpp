@@ -16,7 +16,17 @@ bool GraphNavEvent::check()
         return event_result;
     }
     sf::Vector2i pixelPos = getMousePos(window);
-    sf::Vector2f worldPos = window->mapPixelToCoords(pixelPos);
+    sf::Vector2f worldPos;
+    auto window_ptr = window.lock();
+    if(window_ptr)
+    {
+        worldPos = window_ptr->mapPixelToCoords(pixelPos);
+    }
+    else
+    {
+        throw std::runtime_error("No window to draw on");
+    }
+
     if(body->mouseHover(worldPos))
     {
         hover = true;

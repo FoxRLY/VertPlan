@@ -3,7 +3,7 @@ project(VertPlan)
 
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_BUILD_TYPE Release )
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     message("Windows build")
@@ -31,6 +31,9 @@ add_executable(VertPlan main.cpp
         UIEvents/ButtonEvent.cpp UIEvents/ButtonEvent.h UIEvents/InputTextBoxEvent.cpp UIEvents/InputTextBoxEvent.h
         UIEvents/GraphNavEvent.cpp UIEvents/GraphNavEvent.h  UIEvents/DefaultEvent.cpp UIEvents/DefaultEvent.h
         UIEvents/UIEvent.cpp UIEvents/UIEvent.h UIBodies/GraphDrawingBody.cpp UIBodies/GraphDrawingBody.h
-        GridAssets/Grid.cpp GridAssets/Grid.h InputTextBox.cpp InputTextBox.h GridAssets/CornerInterface.cpp GridAssets/CornerInterface.h GridAssets/Corners.cpp GridAssets/Corners.h GridAssets/GridInterface.cpp GridAssets/GridInterface.h GridAssets/Cells.cpp GridAssets/Cells.h GridAssets/Signs.cpp GridAssets/Signs.h)
+
+        GridAssets/Grid.cpp GridAssets/Grid.h InputTextBox.cpp InputTextBox.h GridAssets/CornerInterface.cpp
+        GridAssets/CornerInterface.h GridAssets/Corners.cpp GridAssets/Corners.h GridAssets/GridInterface.cpp
+        GridAssets/GridInterface.h GridAssets/Cells.cpp GridAssets/Cells.h GridAssets/Signs.cpp GridAssets/Signs.h)
 
 target_link_libraries(VertPlan sfml-graphics sfml-audio sfml-window sfml-system)

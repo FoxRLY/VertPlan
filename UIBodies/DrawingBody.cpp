@@ -2,7 +2,7 @@
 #include <cmath>
 
 
-DrawingBody::DrawingBody(RenderWindow *new_window): UIElementBody(new_window)
+DrawingBody::DrawingBody(std::weak_ptr<RenderWindow> new_window): UIElementBody(std::move(new_window))
 {
 }
 
@@ -41,7 +41,7 @@ void DrawingBody::drawVertLine(Color line_color, float x, float thickness = 2)
     draw_queue.push_back((Drawable*)line);
 }
 
-void DrawingBody::drawPoint(Color point_color, Vector2f pos, float radius = 2)
+[[maybe_unused]] void DrawingBody::drawPoint(Color point_color, Vector2f pos, float radius = 2)
 {
     auto* point = new CircleShape;
     point->setRadius(radius);
@@ -51,7 +51,7 @@ void DrawingBody::drawPoint(Color point_color, Vector2f pos, float radius = 2)
     draw_queue.push_back((Drawable*)point);
 }
 
-void DrawingBody::drawRect(Color rect_fill_color, Color rect_outline_color, Vector2f pos, Vector2f size,
+[[maybe_unused]] void DrawingBody::drawRect(Color rect_fill_color, Color rect_outline_color, Vector2f pos, Vector2f size,
                            float outline_thickness)
 {
     auto* rect = new RectangleShape;
@@ -86,7 +86,15 @@ void DrawingBody::draw()
 {
     for(auto object : draw_queue)
     {
-        window->draw(*object);
+        auto window_ptr = window.lock();
+        if(window_ptr)
+        {
+            window_ptr->draw(*object);
+        }
+        else
+        {
+            throw std::runtime_error("Cannot draw to non existent window");
+        }
     }
 }
 
@@ -117,7 +125,7 @@ FloatRect DrawingBody::getGlobalBounds()
 
 FloatRect DrawingBody::getLocalBounds()
 {
-    return FloatRect(0, 0, shape.width, shape.height);
+    return {0, 0, shape.width, shape.height};
 }
 
 DrawingBody::~DrawingBody()

@@ -28,9 +28,14 @@ bool UIEvent::isEnabled()
     return is_enabled;
 }
 
-Vector2i UIEvent::getMousePos(RenderWindow* window)
+Vector2i UIEvent::getMousePos(const std::weak_ptr<RenderWindow>& window)
 {
-    return Mouse::getPosition(*window);
+    auto window_ptr = window.lock();
+    if(!window_ptr)
+    {
+        throw std::runtime_error("No window to draw on");
+    }
+    return Mouse::getPosition(*window_ptr);
 }
 
 bool UIEvent::isKeyPressed(Keyboard::Key key)

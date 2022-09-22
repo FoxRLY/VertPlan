@@ -1,10 +1,10 @@
 #include "RectShapeBody.h"
 
-RectShapeBody::RectShapeBody(RenderWindow* new_window)
+RectShapeBody::RectShapeBody(std::weak_ptr<RenderWindow> new_window)
         : shape(Vector2f(0,0)), click_color(Color::Black),
           hover_color(Color::Black), resting_color(Color::Black),
           disabled_color(Color::Black),
-          UIElementBody(new_window)
+          UIElementBody(std::move(new_window))
 {
 }
 
@@ -107,32 +107,15 @@ void RectShapeBody::transform(Vector2f pos, Vector2f size)
 
 void RectShapeBody::draw()
 {
-    window->draw(shape);
+    auto window_ptr = window.lock();
+    if(window_ptr)
+    {
+        window_ptr->draw(shape);
+    }
+    else
+    {
+        throw std::runtime_error("Cannot draw to non existent window");
+    }
 }
 
-void RectShapeBodyPreset(RectShapeBody* button_body)
-{
-    button_body->setOutline(5);
-    button_body->setRestingColor(Color(192,192,192,255));
-    button_body->setHoverColor(Color(0,204,102,255));
-    button_body->setClickColor(Color(170,210,255,255));
-    button_body->setDisabledColor(Color(120,120,120,255));
-}
 
-void RectShapeBodyPresetGrid(RectShapeBody* button_body)
-{
-    button_body->setOutline(-0.5);
-    button_body->setRestingColor(Color(240,240,240,255));
-    button_body->setHoverColor(Color(0,102,204,255));
-    button_body->setClickColor(Color(120,120,120,255));
-    button_body->setDisabledColor(Color(120,120,120,255));
-}
-
-void RectShapeBodyInputBoxPreset(RectShapeBody* button_body)
-{
-    button_body->setOutline(-0.5);
-    button_body->setRestingColor(Color(150,150,150,255));
-    button_body->setHoverColor(Color(0,102,204,255));
-    button_body->setClickColor(Color(120,120,120,255));
-    button_body->setDisabledColor(Color(90,90,90,255));
-}
