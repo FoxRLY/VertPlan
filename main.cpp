@@ -34,6 +34,8 @@ int main()
     videoMode.height = videoMode.height/1.2;
     RenderWindow window(videoMode, L"Вертикальная планировка", Style::Default, settings);
     window.setVerticalSyncEnabled(true);
+    RenderWindow* window_ptr = &window;
+    auto window_weak_ptr = std::weak_ptr<RenderWindow>(std::move(window_ptr));
 
     // Шрифт для элементов
     Font mono;

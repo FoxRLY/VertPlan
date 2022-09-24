@@ -1,10 +1,10 @@
 #include "RectShapeBody.h"
 
-RectShapeBody::RectShapeBody(std::weak_ptr<RenderWindow> new_window)
+RectShapeBody::RectShapeBody(std::weak_ptr<RenderWindow>& new_window)
         : shape(Vector2f(0,0)), click_color(Color::Black),
           hover_color(Color::Black), resting_color(Color::Black),
           disabled_color(Color::Black),
-          UIElementBody(std::move(new_window))
+          UIElementBody(new_window)
 {
 }
 
@@ -59,7 +59,7 @@ void RectShapeBody::paintHoverToggled()
     shape.setOutlineColor(hover_color);
 }
 
-void RectShapeBody::setShape(RectangleShape& new_shape)
+[[maybe_unused]] void RectShapeBody::setShape(RectangleShape& new_shape)
 {
     shape = new_shape;
 }
@@ -89,7 +89,7 @@ FloatRect RectShapeBody::getLocalBounds()
     return shape.getLocalBounds();
 }
 
-RectangleShape& RectShapeBody::getShape()
+[[maybe_unused]] RectangleShape& RectShapeBody::getShape()
 {
     return shape;
 }

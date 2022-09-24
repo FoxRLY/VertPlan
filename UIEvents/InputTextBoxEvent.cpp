@@ -91,12 +91,17 @@ bool RectShapeInputBoxEvent::check()
     return event_result;
 }
 
-bool InputTextBoxEvent::inputChar(UIElement* input_box, Text& input_text, char input_char)
+bool InputTextBoxEvent::inputChar(std::weak_ptr<UIElement>& input_box, Text& input_text, char input_char)
 {
-    if(input_box->getEventResult())
+    auto input_box_ptr = input_box.lock();
+    if(!input_box_ptr)
+    {
+        throw std::runtime_error("InputBoxEvent: referenced input box doesn't exist anymore");
+    }
+    if(input_box_ptr->getEventResult())
     {
         InputTextBoxEvent::addChar(input_char, input_text);
-        if(input_text.getGlobalBounds().left+input_text.getGlobalBounds().width >= input_box->getBody()->getGlobalBounds().left+input_box->getBody()->getGlobalBounds().width)
+        if(input_text.getGlobalBounds().left+input_text.getGlobalBounds().width >= input_box_ptr->getBody()->getGlobalBounds().left+input_box_ptr->getBody()->getGlobalBounds().width)
         {
             InputTextBoxEvent::addChar(8, input_text);
         }

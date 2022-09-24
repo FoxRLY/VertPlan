@@ -9,9 +9,9 @@ class UIElementBody
 protected:
     std::weak_ptr<RenderWindow> window;
 public:
-    explicit UIElementBody(std::weak_ptr<RenderWindow> new_window);
-    void setWindow(std::weak_ptr<RenderWindow> new_window);
-    std::weak_ptr<RenderWindow> getWindow();
+    explicit UIElementBody(std::weak_ptr<RenderWindow>& new_window);
+    void setWindow(std::weak_ptr<RenderWindow>& new_window);
+    std::weak_ptr<RenderWindow>& getWindow();
 
     virtual bool mouseHover(Vector2f mouse_pos) = 0;
     virtual void transform(Vector2f pos, Vector2f size) = 0;

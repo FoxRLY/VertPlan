@@ -1,7 +1,7 @@
 #include "CameraBody.h"
 
 
-CameraBody::CameraBody(std::weak_ptr<RenderWindow> new_window) : UIElementBody(std::move(new_window))
+CameraBody::CameraBody(std::weak_ptr<RenderWindow>& new_window) : UIElementBody(new_window)
 {
     auto window_ptr = window.lock();
     if(window_ptr)

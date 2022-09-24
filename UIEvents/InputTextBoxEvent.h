@@ -11,7 +11,7 @@ protected:
     static void addChar(char c, Text& input_text);
 public:
     InputTextBoxEvent(std::shared_ptr<UIElementBody>&  new_body, std::weak_ptr<RenderWindow>& new_window);
-    static bool inputChar(UIElement* input_box, Text& input_text, char input_char);
+    static bool inputChar(std::weak_ptr<UIElement>& input_box, Text& input_text, char input_char);
 };
 
 class RectShapeInputBoxEvent : public InputTextBoxEvent

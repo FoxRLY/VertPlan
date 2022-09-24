@@ -12,7 +12,7 @@ private:
     Vector2f rectPosToViewPos(Vector2f pos);
     Vector2f viewPosToRectPos(Vector2f pos);
 public:
-    explicit CameraBody(std::weak_ptr<RenderWindow> new_window);
+    explicit CameraBody(std::weak_ptr<RenderWindow>& new_window);
     void setDisplayRect(Vector2f pos, Vector2f size);
     void setCameraPos(Vector2f pos);
     [[maybe_unused]] void setCameraCenter(Vector2f pos);

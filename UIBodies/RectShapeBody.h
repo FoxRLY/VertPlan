@@ -1,7 +1,7 @@
 #pragma once
 #include "../UIElements/UIElement.h"
 
-// Работает с ButtonEvent, CheckBoxEvent и InputTextBoxEvent
+// Works with ButtonEvent, CheckBoxEvent и InputTextBoxEvent
 
 class RectShapeBody : public UIElementBody
 {
@@ -12,14 +12,14 @@ private:
     Color resting_color;
     Color disabled_color;
 public:
-    explicit RectShapeBody(std::weak_ptr<RenderWindow> new_window);
+    explicit RectShapeBody(std::weak_ptr<RenderWindow>& new_window);
     void setClickColor(Color new_color);
     void setHoverColor(Color new_color);
     void setRestingColor(Color new_color);
     void setDisabledColor(Color new_color);
     void setSize(Vector2f new_size);
-    void setShape(RectangleShape& new_shape);
-    RectangleShape& getShape();
+    [[maybe_unused]] void setShape(RectangleShape& new_shape);
+    [[maybe_unused]] RectangleShape& getShape();
     void setPos(Vector2f new_pos);
     void setOutline(float new_outline);
     void paintDisabled();

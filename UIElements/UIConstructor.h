@@ -14,10 +14,10 @@ class UIConstructor
 {
 private:
 public:
-    static UIElement* createRectShapeButton(std::weak_ptr<RenderWindow>& window);
-    static UIElement* createRectShapeCheckBox(RenderWindow* window);
-    static UIElement* createRectShapeInputTextBox(RenderWindow* window);
-    static UIElement* createDrawingBox(RenderWindow* window);
-    static UIElement* createGraphDrawingBox(RenderWindow* window);
-    static UIElement* createCameraBox(RenderWindow* window);
+    static std::shared_ptr<UIElement> createRectShapeButton(std::weak_ptr<RenderWindow>& window);
+    static std::shared_ptr<UIElement> createRectShapeCheckBox(std::weak_ptr<RenderWindow>& window);
+    static std::shared_ptr<UIElement> createRectShapeInputTextBox(std::weak_ptr<RenderWindow>& window);
+    static std::shared_ptr<UIElement> createDrawingBox(std::weak_ptr<RenderWindow>& window);
+    static std::shared_ptr<UIElement> createGraphDrawingBox(std::weak_ptr<RenderWindow>& window);
+    static std::shared_ptr<UIElement> createCameraBox(std::weak_ptr<RenderWindow>& window);
 };
