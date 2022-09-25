@@ -3,7 +3,7 @@ project(VertPlan)
 
 
 set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_BUILD_TYPE Release )
+set(CMAKE_BUILD_TYPE Debug)
 
 if(${CMAKE_SYSTEM_NAME} STREQUAL "Windows")
     message("Windows build")

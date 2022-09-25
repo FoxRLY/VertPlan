@@ -7,6 +7,14 @@ Vector2f GraphNavEvent::getMouseDelta()
 
 bool GraphNavEvent::check()
 {
+    if(body.expired())
+    {
+        throw std::runtime_error("No body to use event on");
+    }
+    if(window.expired())
+    {
+        throw std::runtime_error("No window to draw on");
+    }
     if(!is_enabled)
     {
         event_result = false;
@@ -16,18 +24,8 @@ bool GraphNavEvent::check()
         return event_result;
     }
     sf::Vector2i pixelPos = getMousePos(window);
-    sf::Vector2f worldPos;
-    auto window_ptr = window.lock();
-    if(window_ptr)
-    {
-        worldPos = window_ptr->mapPixelToCoords(pixelPos);
-    }
-    else
-    {
-        throw std::runtime_error("No window to draw on");
-    }
-
-    if(body->mouseHover(worldPos))
+    sf::Vector2f worldPos = window.lock()->mapPixelToCoords(pixelPos);
+    if(body.lock()->mouseHover(worldPos))
     {
         hover = true;
         if(isMouseKeyPressed(Mouse::Right))

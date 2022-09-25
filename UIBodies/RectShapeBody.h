@@ -12,7 +12,7 @@ private:
     Color resting_color;
     Color disabled_color;
 public:
-    explicit RectShapeBody(std::weak_ptr<RenderWindow>& new_window);
+    explicit RectShapeBody(std::shared_ptr<RenderWindow>& new_window);
     void setClickColor(Color new_color);
     void setHoverColor(Color new_color);
     void setRestingColor(Color new_color);

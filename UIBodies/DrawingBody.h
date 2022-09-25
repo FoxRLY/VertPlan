@@ -9,7 +9,7 @@ protected:
     std::vector<std::unique_ptr<Drawable>> draw_queue;
     FloatRect shape;
 public:
-    explicit DrawingBody(std::weak_ptr<RenderWindow>& new_window);
+    explicit DrawingBody(std::shared_ptr<RenderWindow>& new_window);
     void drawHorLine(Color line_color, float y, float thickness);
     void drawVertLine(Color line_color, float x, float thickness);
     [[maybe_unused]] void drawPoint(Color point_color, Vector2f pos, float radius);

@@ -27,11 +27,15 @@ void GridInterface::setDimensions(Vector2i new_dims)
 
 void GridInterface::draw()
 {
+    if(window.expired())
+    {
+        throw std::runtime_error("No window to draw on");
+    }
     cells.draw();
     corners.draw();
     signs.draw();
-    window->draw(zero_work_label);
-    window->draw(zero_work_value);
+    window.lock()->draw(zero_work_label);
+    window.lock()->draw(zero_work_value);
 }
 
 void GridInterface::hideCorners()
@@ -65,7 +69,7 @@ void GridInterface::eventCheck()
     cells.eventCheck();
 }
 
-GridInterface::GridInterface(int cell_pixel_size, float cell_size, RenderWindow* new_window, TextPresetFunc func, Font& font):
+GridInterface::GridInterface(int cell_pixel_size, float cell_size, std::shared_ptr<RenderWindow>& new_window, TextPresetFunc func, Font& font):
 cells(new_window, cell_pixel_size),
 corners({0,0}, cell_pixel_size, func, font, new_window),
 math(),
@@ -80,7 +84,7 @@ signs(new_window, func, font, {0,0}, {0,0}, cell_pixel_size)
     setCellSize(cell_size);
 }
 
-GridInterface::GridInterface(int cell_pixel_size, float cell_size, Vector2i dims, RenderWindow *window, TextPresetFunc func,
+GridInterface::GridInterface(int cell_pixel_size, float cell_size, Vector2i dims, std::shared_ptr<RenderWindow>& window, TextPresetFunc func,
                              Font &font):
                              GridInterface(cell_pixel_size, cell_size, window, func, font)
 {

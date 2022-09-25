@@ -10,7 +10,7 @@ private:
     float grid_range;
     Font font;
 public:
-    explicit GraphDrawingBody(std::weak_ptr<RenderWindow>& new_window);
+    explicit GraphDrawingBody(std::shared_ptr<RenderWindow>& new_window);
     void setFont(Font& new_font);
     void setPlaneSize(int size);
     void setGridSize(int size);

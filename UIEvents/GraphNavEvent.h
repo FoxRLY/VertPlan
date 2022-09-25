@@ -6,7 +6,7 @@ class GraphNavEvent : public UIEvent
 {
 private:
     std::weak_ptr<RenderWindow> window;
-    std::shared_ptr<UIElementBody> body;
+    std::weak_ptr<UIElementBody> body;
     bool hover;
     Vector2f prev_mouse_pos;
     Vector2f mouse_pos_delta;
@@ -14,7 +14,7 @@ private:
     bool center_graph_flag;
 
 public:
-    GraphNavEvent(std::shared_ptr<UIElementBody>& new_body, std::weak_ptr<RenderWindow>& new_window)
+    GraphNavEvent(std::shared_ptr<UIElementBody>& new_body, std::shared_ptr<RenderWindow>& new_window)
     {
         body = new_body;
         window = new_window;

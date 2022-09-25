@@ -12,12 +12,16 @@
 
 class UIConstructor
 {
-private:
 public:
-    static std::shared_ptr<UIElement> createRectShapeButton(std::weak_ptr<RenderWindow>& window);
-    static std::shared_ptr<UIElement> createRectShapeCheckBox(std::weak_ptr<RenderWindow>& window);
-    static std::shared_ptr<UIElement> createRectShapeInputTextBox(std::weak_ptr<RenderWindow>& window);
-    static std::shared_ptr<UIElement> createDrawingBox(std::weak_ptr<RenderWindow>& window);
-    static std::shared_ptr<UIElement> createGraphDrawingBox(std::weak_ptr<RenderWindow>& window);
-    static std::shared_ptr<UIElement> createCameraBox(std::weak_ptr<RenderWindow>& window);
+    static std::unique_ptr<UIElement> createRectShapeButton(std::shared_ptr<RenderWindow>& window);
+    static std::unique_ptr<UIElement> createRectShapeCheckBox(std::shared_ptr<RenderWindow>& window);
+    static std::unique_ptr<UIElement> createRectShapeInputTextBox(std::shared_ptr<RenderWindow>& window);
+    static std::unique_ptr<UIElement> createDrawingBox(std::shared_ptr<RenderWindow>& window);
+    static std::unique_ptr<UIElement> createGraphDrawingBox(std::shared_ptr<RenderWindow>& window);
+    static std::unique_ptr<UIElement> createCameraBox(std::shared_ptr<RenderWindow>& window);
+    static std::unique_ptr<UIElement> createRectShapeCheckBoxGridPreset(std::shared_ptr<RenderWindow>& window);
 };
+
+void RectShapeBodyPreset(RectShapeBody* button_body);
+void RectShapeBodyPresetGrid(RectShapeBody* button_body);
+void RectShapeBodyInputBoxPreset(RectShapeBody* button_body);

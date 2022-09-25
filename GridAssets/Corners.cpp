@@ -1,5 +1,7 @@
 #include "Corners.h"
 
+#include <memory>
+
 void Corners::setPos(Vector2f new_pos)
 {
     pos = new_pos;
@@ -10,6 +12,40 @@ void Corners::setCellPixelSize(int new_cell_size)
     cell_pixel_size = new_cell_size;
 }
 
+void Corners::setDimensions(Vector2i new_dims)
+{
+    if(window.expired())
+    {
+        throw std::runtime_error("No window to draw on");
+    }
+    if(new_dims.x < 0 || new_dims.y < 0)
+    {
+        throw std::length_error("Cell matrix dimensions are negative");
+    }
+
+    auto window_ptr = window.lock();
+    corner_matrix.resize(new_dims.y);
+    for(int y = 0; y < new_dims.y; y++)
+    {
+        corner_matrix[y].resize(new_dims.x);
+        for(int x = 0; x < new_dims.x; x++)
+        {
+            if(x < dims.x && y < dims.y)
+            {
+                continue;
+            }
+            else
+            {
+                corner_matrix[y][x] = std::make_unique<CornerInterface>(window_ptr, preset_func, font);
+                corner_matrix[y][x]->setPos({(float)x*cell_pixel_size+x*1,(float)y*cell_pixel_size+y*1});
+            }
+        }
+    }
+
+    dims =  new_dims;
+}
+
+/*
 void Corners::setDimensions(Vector2i new_dims)
 {
     CornerInterface*** new_corner_matrix = new CornerInterface**[new_dims.y];
@@ -53,17 +89,17 @@ void Corners::setDimensions(Vector2i new_dims)
     corner_matrix = new_corner_matrix;
     dims = new_dims;
 }
+*/
 
-Corners::Corners(Vector2f new_pos, int new_cell_size, TextPresetFunc new_func, Font& new_font, RenderWindow* new_window): font{new_font}
+Corners::Corners(Vector2f new_pos, int new_cell_size, TextPresetFunc new_func, Font& new_font, std::shared_ptr<RenderWindow>& new_window): font{new_font}
 {
     window = new_window;
     preset_func = new_func;
-    corner_matrix = nullptr;
     setPos(new_pos);
     setCellPixelSize(new_cell_size);
 }
 
-Corners::Corners(Vector2f new_pos, int new_cell_size, Vector2i new_dims, TextPresetFunc new_func, Font& new_font, RenderWindow* new_window): Corners(new_pos, new_cell_size, new_func, new_font, new_window)
+Corners::Corners(Vector2f new_pos, int new_cell_size, Vector2i new_dims, TextPresetFunc new_func, Font& new_font, std::shared_ptr<RenderWindow>& new_window): Corners(new_pos, new_cell_size, new_func, new_font, new_window)
 {
     setDimensions(new_dims);
 }

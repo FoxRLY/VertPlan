@@ -1,7 +1,7 @@
 #include "ButtonEvent.h"
 #include "../UIBodies/RectShapeBody.h"
 
-ButtonEvent::ButtonEvent(std::shared_ptr<UIElementBody>& new_body, std::weak_ptr<RenderWindow>& new_window)
+ButtonEvent::ButtonEvent(std::shared_ptr<UIElementBody>& new_body, std::shared_ptr<RenderWindow>& new_window)
 {
     hold = false;
     body = new_body;
@@ -20,7 +20,15 @@ ButtonEvent::ButtonEvent(std::shared_ptr<UIElementBody>& new_body, std::weak_ptr
 
 bool RectShapeButtonEvent::check()
 {
-    auto rect_body = std::dynamic_pointer_cast<RectShapeBody>(body);
+    if(body.expired())
+    {
+        throw std::runtime_error("No body to use event on");
+    }
+    if(window.expired())
+    {
+        throw std::runtime_error("No window to draw on");
+    }
+    auto rect_body = std::dynamic_pointer_cast<RectShapeBody>(body.lock());
     if(!is_enabled)
     {
         rect_body->paintDisabled();
@@ -30,16 +38,7 @@ bool RectShapeButtonEvent::check()
     }
 
     sf::Vector2i pixelPos = getMousePos(window);
-    sf::Vector2f worldPos;
-    auto window_ptr = window.lock();
-    if(window_ptr)
-    {
-        worldPos = window_ptr->mapPixelToCoords(pixelPos);
-    }
-    else
-    {
-        throw std::runtime_error("No window to draw on");
-    }
+    sf::Vector2f worldPos = window.lock()->mapPixelToCoords(pixelPos);
     if(rect_body->mouseHover(worldPos))
     {
         if(isMouseKeyPressed(Mouse::Left))
@@ -72,7 +71,15 @@ bool RectShapeButtonEvent::check()
 
 bool RectShapeCheckBoxEvent::check()
 {
-    auto rect_body = std::dynamic_pointer_cast<RectShapeBody>(body);
+    if(body.expired())
+    {
+        throw std::runtime_error("No body to use event on");
+    }
+    if(window.expired())
+    {
+        throw std::runtime_error("No window to draw on");
+    }
+    auto rect_body = std::dynamic_pointer_cast<RectShapeBody>(body.lock());
     if(!is_enabled)
     {
         if(event_result)
@@ -87,16 +94,7 @@ bool RectShapeCheckBoxEvent::check()
     }
 
     sf::Vector2i pixelPos = getMousePos(window);
-    sf::Vector2f worldPos;
-    auto window_ptr = window.lock();
-    if(window_ptr)
-    {
-        worldPos = window_ptr->mapPixelToCoords(pixelPos);
-    }
-    else
-    {
-        throw std::runtime_error("No window to draw on");
-    }
+    sf::Vector2f worldPos = window.lock()->mapPixelToCoords(pixelPos);
     if(rect_body->mouseHover(worldPos))
     {
         if(isMouseKeyPressed(Mouse::Left))

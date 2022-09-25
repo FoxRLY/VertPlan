@@ -30,9 +30,9 @@ void UIElement::setEventEnabled(bool active)
     event->setEnabled(active);
 }
 
-void UIElement::eventCheckLoop(std::vector<UIElement*>& event_list)
+void UIElement::eventCheckLoop(std::vector<std::shared_ptr<UIElement>>& event_list)
 {
-    for(auto element : event_list)
+    for(auto& element : event_list)
     {
         element->eventCheck();
     }

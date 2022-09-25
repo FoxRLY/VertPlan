@@ -1,6 +1,6 @@
 #include "RectShapeBody.h"
 
-RectShapeBody::RectShapeBody(std::weak_ptr<RenderWindow>& new_window)
+RectShapeBody::RectShapeBody(std::shared_ptr<RenderWindow>& new_window)
         : shape(Vector2f(0,0)), click_color(Color::Black),
           hover_color(Color::Black), resting_color(Color::Black),
           disabled_color(Color::Black),

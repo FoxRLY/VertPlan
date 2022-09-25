@@ -1,6 +1,6 @@
 #include "InputTextBoxEvent.h"
 
-InputTextBoxEvent::InputTextBoxEvent(std::shared_ptr<UIElementBody>&  new_body, std::weak_ptr<RenderWindow>& new_window):
+InputTextBoxEvent::InputTextBoxEvent(std::shared_ptr<UIElementBody>&  new_body, std::shared_ptr<RenderWindow>& new_window):
 window(new_window),
 body(new_body)
 {
@@ -26,7 +26,15 @@ void InputTextBoxEvent::addChar(char c, Text& input_text)
 
 bool RectShapeInputBoxEvent::check()
 {
-    auto rect_body = std::dynamic_pointer_cast<RectShapeBody>(body);
+    if(body.expired())
+    {
+        throw std::runtime_error("No body to use event on");
+    }
+    if(window.expired())
+    {
+        throw std::runtime_error("No window to draw on");
+    }
+    auto rect_body = std::dynamic_pointer_cast<RectShapeBody>(body.lock());
     if(!is_enabled)
     {
         rect_body->paintDisabled();
@@ -40,16 +48,7 @@ bool RectShapeInputBoxEvent::check()
         return event_result;
     }
     sf::Vector2i pixelPos = getMousePos(window);
-    auto window_ptr = window.lock();
-    sf::Vector2f worldPos;
-    if(window_ptr)
-    {
-        worldPos = window_ptr->mapPixelToCoords(pixelPos);
-    }
-    else
-    {
-        throw std::runtime_error("No window to draw on");
-    }
+    sf::Vector2f worldPos = window.lock()->mapPixelToCoords(pixelPos);
     if(rect_body->mouseHover(worldPos))
     {
         if(isMouseKeyPressed(Mouse::Left))
@@ -91,17 +90,12 @@ bool RectShapeInputBoxEvent::check()
     return event_result;
 }
 
-bool InputTextBoxEvent::inputChar(std::weak_ptr<UIElement>& input_box, Text& input_text, char input_char)
+bool InputTextBoxEvent::inputChar(std::shared_ptr<UIElement>& input_box, Text& input_text, char input_char)
 {
-    auto input_box_ptr = input_box.lock();
-    if(!input_box_ptr)
-    {
-        throw std::runtime_error("InputBoxEvent: referenced input box doesn't exist anymore");
-    }
-    if(input_box_ptr->getEventResult())
+    if(input_box->getEventResult())
     {
         InputTextBoxEvent::addChar(input_char, input_text);
-        if(input_text.getGlobalBounds().left+input_text.getGlobalBounds().width >= input_box_ptr->getBody()->getGlobalBounds().left+input_box_ptr->getBody()->getGlobalBounds().width)
+        if(input_text.getGlobalBounds().left+input_text.getGlobalBounds().width >= input_box->getBody()->getGlobalBounds().left+input_box->getBody()->getGlobalBounds().width)
         {
             InputTextBoxEvent::addChar(8, input_text);
         }

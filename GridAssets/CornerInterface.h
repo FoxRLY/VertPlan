@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <memory>
 #include "../UIElements/UIConstructor.h"
 #include "../InputTextBox.h"
 
@@ -9,18 +10,18 @@ class CornerInterface
 {
 private:
     bool is_active;
-    RenderWindow* window;
+    std::weak_ptr<RenderWindow> window;
     Vector2f pos;
     Text result_delta_text;
     InputTextBox input_height_text_box;
     void updateTextComposition();
 public:
-    CornerInterface(RenderWindow* window, TextPresetFunc func, Font& font);
-    CornerInterface(RenderWindow* window, Vector2f new_pos, TextPresetFunc func, Font& font);
+    CornerInterface(std::shared_ptr<RenderWindow>& window, TextPresetFunc func, Font& font);
+    CornerInterface(std::shared_ptr<RenderWindow>& window, Vector2f new_pos, TextPresetFunc func, Font& font);
     void formatText(TextPresetFunc func, Font& font);
     void setPos(Vector2f new_pos);
     void draw();
-    void setDeltaText(std::string new_delta);
+    void setDeltaText(std::string& new_delta);
     float getInputHeight() const;
     void eventCheck();
     void setActive(bool state);

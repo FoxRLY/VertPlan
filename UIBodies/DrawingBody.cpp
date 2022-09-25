@@ -2,7 +2,7 @@
 #include <cmath>
 
 
-DrawingBody::DrawingBody(std::weak_ptr<RenderWindow>& new_window): UIElementBody(new_window)
+DrawingBody::DrawingBody(std::shared_ptr<RenderWindow>& new_window): UIElementBody(new_window)
 {
 }
 

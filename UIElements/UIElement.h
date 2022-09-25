@@ -12,7 +12,7 @@ private:
     std::shared_ptr<UIElementBody> body;
     std::shared_ptr<UIEvent> event;
 public:
-    static void eventCheckLoop(std::vector<UIElement*>& event_list);
+    static void eventCheckLoop(std::vector<std::shared_ptr<UIElement>>& event_list);
 
     virtual void setEventEnabled(bool active);
     virtual bool isEventEnabled();

@@ -7,7 +7,7 @@
 class GridInterface
 {
 private:
-    RenderWindow* window;
+    std::weak_ptr<RenderWindow> window;
     Grid math;
     Corners corners;
     Cells cells;
@@ -16,8 +16,8 @@ private:
     Text zero_work_label;
 
 public:
-    GridInterface(int cell_pixel_size, float cell_size, RenderWindow* window, TextPresetFunc func, Font& font);
-    GridInterface(int cell_pixel_size, float cell_size, Vector2i dims, RenderWindow* window, TextPresetFunc func, Font& font);
+    GridInterface(int cell_pixel_size, float cell_size, std::shared_ptr<RenderWindow>& window, TextPresetFunc func, Font& font);
+    GridInterface(int cell_pixel_size, float cell_size, Vector2i dims, std::shared_ptr<RenderWindow>& window, TextPresetFunc func, Font& font);
     void setCellPixelSize(int cell_size);
     void hideCorners();
     void setCellsActive(bool state);

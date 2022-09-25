@@ -32,50 +32,48 @@ int main()
     VideoMode videoMode = VideoMode::getDesktopMode();
     videoMode.width = videoMode.width/1.2f;
     videoMode.height = videoMode.height/1.2;
-    RenderWindow window(videoMode, L"Вертикальная планировка", Style::Default, settings);
-    window.setVerticalSyncEnabled(true);
-    RenderWindow* window_ptr = &window;
-    auto window_weak_ptr = std::weak_ptr<RenderWindow>(std::move(window_ptr));
+    auto window = std::make_shared<RenderWindow>(videoMode, L"Вертикальная планировка", Style::Default, settings);
+    window->setVerticalSyncEnabled(true);
 
     // Шрифт для элементов
     Font mono;
     mono.loadFromFile("../assets/JetBrainsMono-Bold.ttf");
 
     // Список элементов интерфейса
-    std::vector<UIElement*> main_element_list;
-    std::vector<UIElement*> grid_element_list;
-    std::vector<InputTextBox*> text_box_list;
+    std::vector<std::shared_ptr<UIElement>> main_element_list;
+    std::vector<std::shared_ptr<UIElement>> grid_element_list;
+    std::vector<std::shared_ptr<InputTextBox>> text_box_list;
 
     Vector2i grid_dims = {4,4};
-    GridInterface grid(170, 10, grid_dims, &window, TextPresetGrid, mono);
+    GridInterface grid(170, 10, grid_dims, window, TextPresetGrid, mono);
 
 
     // Камера
-    UIElement* camera = UIConstructor::createCameraBox(&window);
+    auto camera = std::shared_ptr(UIConstructor::createCameraBox(window));
     {
-        auto camera_body = (CameraBody*)camera->getBody();
+        auto camera_body = std::dynamic_pointer_cast<CameraBody>(camera->getBody());
         camera_body->setDisplayRect(Vector2f(0,50), Vector2f((float)videoMode.width, (float)videoMode.height));
-        camera_body->setViewSize(window.getView().getSize());
+        camera_body->setViewSize(window->getView().getSize());
         camera_body->setCameraPos(Vector2f(-50, -100));
         main_element_list.push_back(camera);
     }
     float camera_zoom = 1.0f;
 
     // Галка "Редактировать"
-    UIElement* redact_check_box = UIConstructor::createRectShapeCheckBox(&window);
+    auto redact_check_box = std::shared_ptr(UIConstructor::createRectShapeCheckBox(window));
     {
-        auto body = (RectShapeBody*)redact_check_box->getBody();
+        auto body = std::dynamic_pointer_cast<RectShapeBody>(redact_check_box->getBody());
         body->transform(Vector2f(1050, 10), Vector2f(30, 30));
         //redact_check_box->setEventResult(true);
-        RectShapeBodyPreset(body);
+        RectShapeBodyPreset(body.get());
         main_element_list.push_back(redact_check_box);
     }
 
-    UIElement* solve_button = UIConstructor::createRectShapeButton(&window);
+    auto solve_button = std::shared_ptr(UIConstructor::createRectShapeButton(window));
     {
-        auto body = (RectShapeBody*)solve_button->getBody();
+        auto body = std::dynamic_pointer_cast<RectShapeBody>(solve_button->getBody());
         body->transform({1225,10},{30,30});
-        RectShapeBodyPreset(body);
+        RectShapeBodyPreset(body.get());
         main_element_list.push_back(solve_button);
     }
 
@@ -119,38 +117,38 @@ int main()
         grid_solve_label.setPosition(1110, 10);
     }
 
-// Кол-во клеток по горизонтали
-    InputTextBox grid_x_input(&window);
+    // Кол-во клеток по горизонтали
+    auto grid_x_input = std::make_shared<InputTextBox>(window);
     {
-        grid_x_input.setTextPos(212, 10);
-        grid_x_input.setPreset(TextPreset, mono);
-        grid_x_input.setString("4");
-        grid_x_input.transformInputBox(Vector2f(210, 10), Vector2f(60, 30));
-        main_element_list.push_back(grid_x_input.getUIElement());
-        text_box_list.push_back(&grid_x_input);
+        grid_x_input->setTextPos(212, 10);
+        grid_x_input->setPreset(TextPreset, mono);
+        grid_x_input->setString("4");
+        grid_x_input->transformInputBox(Vector2f(210, 10), Vector2f(60, 30));
+        main_element_list.push_back(grid_x_input->getUIElement().lock());
+        text_box_list.push_back(grid_x_input);
     }
 
     // Кол-во клеток по горизонтали
-    InputTextBox grid_y_input(&window);
+    auto grid_y_input = std::make_shared<InputTextBox>(window);
     {
-        grid_y_input.setPreset(TextPreset, mono);
-        grid_y_input.setString("4");
-        grid_y_input.setTextPos(312, 10);
-        grid_y_input.transformInputBox(Vector2f(310, 10), Vector2f(60, 30));
-        main_element_list.push_back(grid_y_input.getUIElement());
-        text_box_list.push_back(&grid_y_input);
+        grid_y_input->setPreset(TextPreset, mono);
+        grid_y_input->setString("4");
+        grid_y_input->setTextPos(312, 10);
+        grid_y_input->transformInputBox(Vector2f(310, 10), Vector2f(60, 30));
+        main_element_list.push_back(grid_y_input->getUIElement().lock());
+        text_box_list.push_back(grid_y_input);
     }
 
     // Размер квадратов
     float grid_square_value = 10;
-    InputTextBox grid_square_input(&window);
+    auto grid_square_input = std::make_shared<InputTextBox>(window);
     {
-        grid_square_input.setPreset(TextPreset, mono);
-        grid_square_input.setString("10");
-        grid_square_input.setTextPos(Vector2f(650, 10));
-        grid_square_input.transformInputBox(Vector2f(650, 10), Vector2f(60, 30));
-        main_element_list.push_back(grid_square_input.getUIElement());
-        text_box_list.push_back(&grid_square_input);
+        grid_square_input->setPreset(TextPreset, mono);
+        grid_square_input->setString("10");
+        grid_square_input->setTextPos(Vector2f(650, 10));
+        grid_square_input->transformInputBox(Vector2f(650, 10), Vector2f(60, 30));
+        main_element_list.push_back(grid_square_input->getUIElement().lock());
+        text_box_list.push_back(grid_square_input);
     }
 
     // Края карты
@@ -190,18 +188,18 @@ int main()
     // Флаг фокуса окна
     bool has_focus = true;
     // Цикл приложения
-    while(window.isOpen())
+    while(window->isOpen())
     {
-        auto camera_body = (CameraBody*)camera->getBody();
+        auto camera_body = std::dynamic_pointer_cast<CameraBody>(camera->getBody());
         // Цикл обработки событий окна
-        Event event;
-        while(window.pollEvent(event))
+        Event event{};
+        while(window->pollEvent(event))
         {
             switch(event.type)
             {
                 case Event::Closed:
                 {
-                    window.close();
+                    window->close();
                     break;
                 }
                 // Система зума
@@ -222,7 +220,7 @@ int main()
                     if(event.text.unicode < 128)
                     {
                         char input_char = static_cast<char>(event.text.unicode);
-                        InputTextBox::userInputHandle(text_box_list, input_char);
+                        InputTextBox::userInputHandleVector(text_box_list, input_char);
                         grid.inputEventCheck(input_char);
                     }
                     break;
@@ -251,7 +249,7 @@ int main()
                     camera_body->setDefaultView(sf::View(visibleArea));
                     camera_body->setDisplayRect(Vector2f(0,50), Vector2f((float)event.size.width, (float)event.size.height));
                     camera_body->setViewSize(camera_body->getDefaultView().getSize()*camera_zoom);
-                    window.setView(sf::View(visibleArea));
+                    window->setView(sf::View(visibleArea));
                 }
             }
         }
@@ -265,13 +263,13 @@ int main()
             camera_body->resetView();
 
             // Перемещение камеры
-            auto* camera_box_event = (GraphNavEvent*)camera->getEvent();
+            auto camera_box_event = std::dynamic_pointer_cast<GraphNavEvent>(camera->getEvent());
             camera_body->setCameraPos(camera_body->getCameraPos() - camera_box_event->getMouseDelta() * camera_zoom);
         }
 
         int input_grid_x;
         try {
-            input_grid_x = std::stoi(static_cast<std::string>(grid_x_input.getText().getString()));
+            input_grid_x = std::stoi(static_cast<std::string>(grid_x_input->getText().getString()));
             if(input_grid_x != grid_dims.x)
             {
                 grid_dims.x = input_grid_x;
@@ -282,7 +280,7 @@ int main()
 
         int input_grid_y;
         try {
-            input_grid_y = std::stoi(static_cast<std::string>(grid_y_input.getText().getString()));
+            input_grid_y = std::stoi(static_cast<std::string>(grid_y_input->getText().getString()));
             if(input_grid_y != grid_dims.y)
             {
                 grid_dims.y = input_grid_y;
@@ -292,7 +290,7 @@ int main()
 
         float input_cell_size;
         try {
-            input_cell_size = std::stof(static_cast<std::string>(grid_square_input.getText().getString()));
+            input_cell_size = std::stof(static_cast<std::string>(grid_square_input->getText().getString()));
             if(input_cell_size != grid_square_value)
             {
                 grid_square_value = input_cell_size;
@@ -303,13 +301,13 @@ int main()
 
 
         // Фаза отрисовки элементов
-        window.clear(Color::White);
+        window->clear(Color::White);
 
-        window.draw(grid_redact_edge);
-        window.draw(grid_square_input_edge);
-        window.draw(grid_size_input_edge);
+        window->draw(grid_redact_edge);
+        window->draw(grid_square_input_edge);
+        window->draw(grid_size_input_edge);
 
-        window.draw(map_edge);
+        window->draw(map_edge);
 
         camera_body->applyView();
         grid.draw();
@@ -317,20 +315,20 @@ int main()
 
         redact_check_box->draw();
         solve_button->draw();
-        grid_x_input.drawTextBox();
-        grid_y_input.drawTextBox();
-        grid_square_input.drawTextBox();
-        grid_y_input.drawText();
-        grid_x_input.drawText();
-        grid_square_input.drawText();
-        window.draw(grid_size_label);
-        window.draw(grid_size_sign_label);
-        window.draw(grid_square_size_label);
-        window.draw(grid_redact_label);
-        window.draw(grid_solve_label);
+        grid_x_input->drawTextBox();
+        grid_y_input->drawTextBox();
+        grid_square_input->drawTextBox();
+        grid_y_input->drawText();
+        grid_x_input->drawText();
+        grid_square_input->drawText();
+        window->draw(grid_size_label);
+        window->draw(grid_size_sign_label);
+        window->draw(grid_square_size_label);
+        window->draw(grid_redact_label);
+        window->draw(grid_solve_label);
 
         // Вывод изображения
-        window.display();
+        window->display();
 
 
         if(!redact_check_box->getEventResult())

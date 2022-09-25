@@ -1,6 +1,41 @@
 #include "Cells.h"
 
+void Cells::setDimensions(Vector2i new_dims)
+{
+    if(window.expired())
+    {
+        throw std::runtime_error("No window to draw on");
+    }
+    if(new_dims.x < 0 || new_dims.y < 0)
+    {
+        throw std::length_error("Cell matrix dimensions are negative");
+    }
 
+    auto window_ptr = window.lock();
+
+    cell_matrix.resize(new_dims.y);
+    for(int y = 0; y < new_dims.y; y++)
+    {
+        cell_matrix[y].resize(new_dims.x);
+        for(int x = 0; x < new_dims.x; x++)
+        {
+            if(x < dims.x && y < dims.y)
+            {
+                continue;
+            }
+            else
+            {
+                cell_matrix[y][x] = UIConstructor::createRectShapeCheckBoxGridPreset(window_ptr);
+                cell_matrix[y][x]->getBody()->transform({(float)x*cell_pixel_size+ x*1, (float)y*cell_pixel_size+y*1},
+                                                        {(float)cell_pixel_size, (float)cell_pixel_size});
+            }
+        }
+    }
+
+    dims = new_dims;
+}
+
+/*
 void Cells::setDimensions(Vector2i new_dims)
 {
     UIElement*** new_cell_matrix = new UIElement**[new_dims.y];
@@ -16,7 +51,7 @@ void Cells::setDimensions(Vector2i new_dims)
             else
             {
                 new_cell_matrix[y][x] = UIConstructor::createRectShapeCheckBox(window);
-                new_cell_matrix[y][x]->getBody()->transform({(float)x*cell_pixel_size+x*1, (float)y*cell_pixel_size+y*1},
+                new_cell_matrix[y][x]->getBody()->transform({(float)x*cell_pixel_size+ x*1, (float)y*cell_pixel_size+y*1},
                                                             {(float)cell_pixel_size, (float)cell_pixel_size});
                 RectShapeBodyPresetGrid((RectShapeBody*)new_cell_matrix[y][x]->getBody());
             }
@@ -43,16 +78,16 @@ void Cells::setDimensions(Vector2i new_dims)
     cell_matrix = new_cell_matrix;
     dims = new_dims;
 }
+*/
 
-Cells::Cells(RenderWindow *new_window, int new_size)
+Cells::Cells(std::shared_ptr<RenderWindow>& new_window, int new_size)
 {
     dims = {0,0};
-    cell_matrix = nullptr;
     window = new_window;
-    setCellPixelSize(new_size);
+    cell_pixel_size = new_size;
 }
 
-Cells::Cells(RenderWindow *new_window, int new_size, Vector2i new_dims): Cells(new_window, new_size)
+Cells::Cells(std::shared_ptr<RenderWindow>& new_window, int new_size, Vector2i new_dims): Cells(new_window, new_size)
 {
     setDimensions(new_dims);
 }

@@ -1,6 +1,6 @@
 #include "GraphDrawingBody.h"
 
-GraphDrawingBody::GraphDrawingBody(std::weak_ptr<RenderWindow>& new_window) : DrawingBody(new_window)
+GraphDrawingBody::GraphDrawingBody(std::shared_ptr<RenderWindow>& new_window) : DrawingBody(new_window)
 {
     plane_size = 1;
     grid_size = 1;

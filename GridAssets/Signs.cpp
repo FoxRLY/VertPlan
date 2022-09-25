@@ -1,20 +1,24 @@
 #include "Signs.h"
+#include <memory>
 
-
-void Signs::setWindow(RenderWindow *new_window)
+void Signs::setWindow(std::shared_ptr<RenderWindow>& new_window)
 {
     window = new_window;
 }
 
 void Signs::draw()
 {
+    if(window.expired())
+    {
+        throw std::runtime_error("No window to draw on");
+    }
     for(auto& sign: horizontal_signs)
     {
-        window->draw(sign);
+        window.lock()->draw(sign);
     }
     for(auto& sign: vertical_signs)
     {
-        window->draw(sign);
+        window.lock()->draw(sign);
     }
 }
 
@@ -61,7 +65,7 @@ void Signs::setPos(Vector2i new_pos)
     setDimensions(dims);
 }
 
-Signs::Signs(RenderWindow *new_window, FontPresetFunc func, Font &font, Vector2i new_pos, Vector2i new_dims, int size):
+Signs::Signs(std::shared_ptr<RenderWindow>& new_window, FontPresetFunc func, Font &font, Vector2i new_pos, Vector2i new_dims, int size):
         preset_font(font)
 {
     window = new_window;
