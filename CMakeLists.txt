@@ -32,7 +32,7 @@ add_executable(VertPlan main.cpp
         UIEvents/GraphNavEvent.cpp UIEvents/GraphNavEvent.h  UIEvents/DefaultEvent.cpp UIEvents/DefaultEvent.h
         UIEvents/UIEvent.cpp UIEvents/UIEvent.h UIBodies/GraphDrawingBody.cpp UIBodies/GraphDrawingBody.h
 
-        GridAssets/Grid.cpp GridAssets/Grid.h InputTextBox.cpp InputTextBox.h GridAssets/CornerInterface.cpp
+        GridAssets/Grid.cpp GridAssets/Grid.h GridAssets/InputTextBox.cpp GridAssets/InputTextBox.h GridAssets/CornerInterface.cpp
         GridAssets/CornerInterface.h GridAssets/Corners.cpp GridAssets/Corners.h GridAssets/GridInterface.cpp
         GridAssets/GridInterface.h GridAssets/Cells.cpp GridAssets/Cells.h GridAssets/Signs.cpp GridAssets/Signs.h)
 

@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 #include "UIElements/UIConstructor.h"
-#include "InputTextBox.h"
+#include "GridAssets/InputTextBox.h"
 #include "GridAssets/GridInterface.h"
 
 using namespace sf;

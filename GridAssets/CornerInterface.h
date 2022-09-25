@@ -2,7 +2,7 @@
 #include <string>
 #include <memory>
 #include "../UIElements/UIConstructor.h"
-#include "../InputTextBox.h"
+#include "InputTextBox.h"
 
 using TextPresetFunc = void(*)(Text&, Font&);
 
